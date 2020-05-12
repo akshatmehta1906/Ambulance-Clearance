@@ -1,17 +1,24 @@
-import 'package:flutter/material.dart';
-import 'package:ambulance/screen/home.dart';
-import 'package:ambulance/screen/loading.dart';
-import 'package:ambulance/screen/loginpage.dart';
-import 'package:ambulance/screen/checkin.dart';
 
-void main() => runApp(MaterialApp(
-  initialRoute: '/checkin_page',
-  routes: {
-    '/' : (context) => Loading(),
-    '/checkin_page' : (context) => Choose(),
-    '/login' : (context) => login(),
-    '/home' : (context) => Home(),
-  },
-));
+import 'package:ambulance/services/auth.dart';
+import 'package:flutter/material.dart';
+import 'package:ambulance/wrapper/wrapper.dart';
+import 'package:provider/provider.dart';
+import 'package:ambulance/models/user.dart';
+
+
+
+void main() => runApp(MyApp());
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return StreamProvider<User>.value(
+      value: AuthService().user,
+      child: MaterialApp(
+        home:Wrapper(),
+      ),
+    );
+  }
+}
 
 
