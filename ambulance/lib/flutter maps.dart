@@ -23,6 +23,7 @@ class _flutter_mapsState extends State<flutter_maps> {
 
   MapController controller = MapController();
 
+
   getPermission() async{
     final GeolocationResult result =
     await Geolocation.requestLocationPermission(permission: const LocationPermission(
@@ -36,12 +37,11 @@ class _flutter_mapsState extends State<flutter_maps> {
       if(result.isSuccessful){
         final coords =
         await Geolocation.currentLocation(accuracy: LocationAccuracy.best);
-        print(coords);
       }
     });
   }
   buildMap(){
-    getLocation().then((response){
+    return getLocation().then((response){
       if(response.isSuccessful){
         response.listen((value){
           controller.move(LatLng(value.location.latitude, value.location.longitude),
@@ -55,6 +55,7 @@ class _flutter_mapsState extends State<flutter_maps> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Geolocation'),
+        backgroundColor: Colors.grey[800],
       ),
       body: FlutterMap(
         mapController: controller,
@@ -63,7 +64,17 @@ class _flutter_mapsState extends State<flutter_maps> {
           TileLayerOptions(
             urlTemplate:
               "https://{s}.title.openstreetmap.org/{z}/{x}/{y}.png",
-          )
+          ),
+          MarkerLayerOptions(markers: [
+            Marker(
+              width: 45.0,
+              height: 45.0,
+              point: LatLng(getLocation().then(response){response.listen((value){value.location.latitude});}, getLocation().then(response){response.listen((value){value.location.longitude});}),
+              builder: (context) => Container(
+                child: IconButton(icon: Icons.location_on, onPressed: null, color: Colors.red,iconSize: 45.0),
+              )
+            )
+          ])
         ],
       ),
     );

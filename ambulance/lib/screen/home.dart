@@ -10,31 +10,14 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
 
-  getPermission() async{
-    final GeolocationResult result =
-        await Geolocation.requestLocationPermission(permission: const LocationPermission(
-          android: LocationPermissionAndroid.fine,
-          ios: LocationPermissionIOS.always
-        ));
-    return result;
-  }
-  getLocation(){
-    return getPermission().then((result) async{
-      if(result.isSuccessful){
-        final coords =
-        await Geolocation.currentLocation(accuracy: LocationAccuracy.best);
-        print(coords);
-      }
-    });
-  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[200],
+      backgroundColor: Colors.grey[900],
       appBar: AppBar(
         title: Text('RastaDo'),
         centerTitle: true,
-        backgroundColor: Colors.grey[800],
+        backgroundColor: Colors.grey[850],
       ),
       body: Center(
         child: Column(
@@ -42,7 +25,6 @@ class _HomeState extends State<Home> {
             Text('this is home screen'),
             RaisedButton(
               onPressed: (){
-                getLocation ();
               },
               child: Text('location'),
 
