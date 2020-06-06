@@ -15,4 +15,4 @@ For help getting started with Flutter, view our
 [online documentation](https://flutter.dev/docs), which offers tutorials,
 samples, guidance on mobile development, and a full API reference.
 
-The code for the [get_location](https://medium.com/flutter-community/build-a-location-service-in-flutter-367a1b212f7a) class and [geolocation] (https://medium.com/swlh/working-with-geolocation-and-geocoding-in-flutter-and-integration-with-maps-16fb0bc35ede) package is taken from websites. 
+The code for the get_location class and  geolocation package is taken from https://medium.com/flutter-community/build-a-location-service-in-flutter-367a1b212f7a  and  https://medium.com/swlh/working-with-geolocation-and-geocoding-in-flutter-and-integration-with-maps-16fb0bc35ede respectively. 
