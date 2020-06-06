@@ -69,7 +69,7 @@ class _flutter_mapsState extends State<flutter_maps> {
             Marker(
               width: 45.0,
               height: 45.0,
-              point: LatLng(getLocation().then(response){response.listen((value){value.location.latitude});}, getLocation().then(response){response.listen((value){value.location.longitude});}),
+              point: LatLng( ),
               builder: (context) => Container(
                 child: IconButton(icon: Icons.location_on, onPressed: null, color: Colors.red,iconSize: 45.0),
               )

@@ -1,29 +1,43 @@
 import 'package:flutter/material.dart';
-import 'package:latlong/latlong.dart';
+import 'package:location/location.dart';
+import 'package:ambulance/user_location.dart';
 import 'package:geolocation/geolocation.dart';
 
-class find_Location{
-
+class LocationService {
+  UserLocation _currentLocation;
   var location = Location();
-  Map<String, double> userLocation;
 
-  userLocation = await location.getLocation();
-
-  getPermission() async{
-    final GeolocationResult result =
-    await Geolocation.requestLocationPermission(permission: const LocationPermission(
-        android: LocationPermissionAndroid.fine,
-        ios: LocationPermissionIOS.always
-    ));
-    return result;
+  Future<UserLocation> getLocation() async {
+    try {
+      var userLocation = await location.getLocation();
+      _currentLocation = UserLocation(
+        latitude: userLocation.latitude,
+        longitude: userLocation.longitude,
+      );
+    } on Exception catch (e) {
+      print('Could not get location: ${e.toString()}');
+    }
+    return _currentLocation;
   }
-  getLocation(){
-    return getPermission().then((result) async{
-      if(result.isSuccessful){
-        final coords =
-        await Geolocation.currentLocation(accuracy: LocationAccuracy.best);
-      }
-    });
-  }
-
 }
+
+StreamController<UserLocation> _locationController =
+StreamController<UserLocation>();
+Stream<UserLocation> get locationStream => _locationController.stream;
+LocationService() {
+  // Request permission to use location
+  location.requestPermission().then((granted) {
+    if (granted) {
+      // If granted listen to the onLocationChanged stream and emit over our controller
+      location.onLocationChanged().listen((locationData) {
+        if (locationData != null) {
+          _locationController.add(UserLocation(
+            latitude: locationData.latitude,
+            longitude: locationData.longitude,
+          ));
+        }
+      });
+    }
+  });
+}
+
