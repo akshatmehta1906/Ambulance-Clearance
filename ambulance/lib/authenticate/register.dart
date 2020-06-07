@@ -27,22 +27,63 @@ class _RegisterState extends State<Register> {
   @override
   Widget build(BuildContext context) {
     return loading? Loading(): Scaffold(
-      backgroundColor: Colors.brown[100],
-      appBar: AppBar(
-        backgroundColor: Colors.brown[400],
-        elevation: 0.0,
-        title: Text('Register'),
-        actions: <Widget>[
-          FlatButton.icon(
-            icon: Icon(Icons.person),
-            label: Text('Sign In'),
-            onPressed: () {
-              widget.toggleView();
-            },
-          )
-        ],
+
+      backgroundColor: Colors.grey[900],
+      resizeToAvoidBottomPadding: false,
+      body: SafeArea
+        (
+        child: Column
+          (
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+        Container
+        (
+        child: Stack
+        (
+            children: <Widget>[
+            Container
+            (
+            padding: EdgeInsets.fromLTRB(15.0, 110.0, 0.0, 0.0),
+        child: Text
+          (
+          'Hello.',
+          style:
+          TextStyle
+            (
+            fontSize: 45.0,
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
+        ),
       ),
-      body: Container(
+      ],
+    ),
+    ),
+
+    Container(
+    child: Stack(
+    children: <Widget>[
+    Container(
+    padding: EdgeInsets.fromLTRB(15.0, 5.0, 0.0, 0.0),
+    child: Text(
+    'New Here?',
+    style:
+    TextStyle(
+    fontSize: 45.0,
+    fontWeight: FontWeight.bold,
+    color: Colors.white,
+    ),
+    ),
+    ),
+    ],
+    ),
+    ),
+
+
+
+
+
+      Container(
         padding: EdgeInsets.symmetric(vertical: 20, horizontal: 50),
         child: Form(
           key: _formKey,
@@ -69,35 +110,85 @@ class _RegisterState extends State<Register> {
                   },
                 ),
 
-                SizedBox(height: 20),
+
+
+
+
+
+
+                SizedBox(height: 10.0),
+
+                SizedBox(height: 50),
                 RaisedButton(
-                  color: Colors.pink[400],
-                  child: Text('Register',
-                      style: TextStyle(color: Colors.white)),
-                  onPressed: () async{
-                    setState(() => loading=true );
-                    if(_formKey.currentState.validate())
+                    color: Colors.blue[400],
+                    child: Text('Register',
+                        style: TextStyle(color: Colors.white)),
+                    onPressed: () async{
+                      setState(() => loading=true );
+                      if(_formKey.currentState.validate())
                       {
                         dynamic result=await _auth.registerWithEmailandPassword(email, password);
                         if(result==null)
-                          {
-                            setState((){
-                              error='Please supply a valid Email';
-                              loading=false;
+                        {
+                          setState((){
+                            error='Please supply a valid Email';
+                            loading=false;
                           });
 
-                            }
-                          }
+                        }
                       }
+
+                    }
                 ),
+
+
+
 
                 SizedBox(height:20),
                 Text(error, style: TextStyle(color: Colors.red, fontSize: 14)),
 
+
+
+                SizedBox(height: 20.0),
+
+                Container(
+                  height: 40.0,
+                  color: Colors.transparent,
+                  child: Container(
+                    child: InkWell(
+                      onTap: () {
+                        widget.toggleView();
+                      },
+                      child: Center(
+                        child: Text('Login',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Colors.grey[800],
+
+                            )
+                        ),
+                      ),
+
+
+                    ),
+                  ),
+                ),
               ],
-          ),
+          )
         ),
+
+
+
       ),
+            ]
+        ),
+      )
     );
+
+
   }
 }
+
+
+
+
