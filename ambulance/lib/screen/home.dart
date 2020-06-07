@@ -19,17 +19,20 @@ class _HomeState extends State<Home> {
         backgroundColor: Colors.grey[850],
       ),
       body: Center(
-        child: Column(
-          children: <Widget>[
-            Text('this is home screen'),
-            RaisedButton(
-              onPressed: (){
-                Navigator.pushNamed(context, '/flutter_Map');
-              },
-              child: Text('location'),
-
-            )
-          ],
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(10.0, 20.0, 10.0, 0.0),
+          child: Column(
+            children: <Widget>[
+              Text('this is home screen', style: TextStyle(color: Colors.white),),
+              SizedBox(height: 10.0,),
+              RaisedButton(
+                onPressed: (){
+                  Navigator.pushNamed(context, '/flutter_Map');
+                },
+                child: Text('location'),
+              )
+            ],
+          ),
         ),
       ),
     );

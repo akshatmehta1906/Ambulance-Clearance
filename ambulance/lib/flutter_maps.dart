@@ -9,6 +9,9 @@ class flutterMap extends StatefulWidget {
 
 class _flutterMapState extends State<flutterMap> {
 
+  double _latitude = 40.71;
+  double _longitude = -74.00;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -18,10 +21,10 @@ class _flutterMapState extends State<flutterMap> {
         backgroundColor: Colors.grey[800],
       ),
       body: FlutterMap(
-        options: MapOptions(center: LatLng(_latitude, _longitde), minZoom: 5.0),
+        options: MapOptions(center: LatLng(_latitude, _longitude), minZoom: 5.0),
         layers: [
           TileLayerOptions(
-            urlTemplate: "https://{s}.title.openstreetmap.org/{z}/{x}/{y}.png",
+            urlTemplate: "https://www.openstreetmap.org/",
             subdomains: ['a', 'b', 'c']
           ),
           MarkerLayerOptions(markers: [
