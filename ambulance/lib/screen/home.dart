@@ -25,6 +25,7 @@ class _HomeState extends State<Home> {
             Text('this is home screen'),
             RaisedButton(
               onPressed: (){
+                Navigator.pushNamed(context, '/flutter_Map');
               },
               child: Text('location'),
 
@@ -35,3 +36,5 @@ class _HomeState extends State<Home> {
     );
   }
 }
+
+

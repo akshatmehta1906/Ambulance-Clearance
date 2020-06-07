@@ -1,3 +1,6 @@
+import 'dart:js';
+
+import 'package:ambulance/flutter_maps.dart';
 import 'package:flutter/material.dart';
 import 'package:ambulance/screen/home.dart';
 import 'package:ambulance/screen/loading.dart';
@@ -11,5 +14,6 @@ void main() => runApp(MaterialApp(
     '/checkin_page' : (context) => Choose(),
     '/login' : (context) => login(),
     '/home' : (context) => Home(),
+    '/flutter_Map': (context) => flutterMap(),
   },
 ));
