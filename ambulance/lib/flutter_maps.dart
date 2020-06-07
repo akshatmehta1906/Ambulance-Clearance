@@ -28,7 +28,7 @@ class _flutterMapState extends State<flutterMap> {
             Marker(
               width: 45.0,
               height: 45.0,
-              point: LatLng(40.71, -74.00),
+              point: LatLng(_latitude, _longitude),
               builder: (context) => Container(
                 child: IconButton(icon: Icon(Icons.location_on), onPressed: null, color: Colors.red,),
               )
