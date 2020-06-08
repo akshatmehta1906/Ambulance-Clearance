@@ -9,8 +9,14 @@ class flutterMap extends StatefulWidget {
 
 class _flutterMapState extends State<flutterMap> {
 
-  double _latitude = 40.71;
-  double _longitude = -74.00;
+  MapController controller = MapController();
+  double _latitude = 19.1334;
+  double _longitude = 72.9133;
+
+  buildMap(){
+    return controller.move(LatLng(_latitude, _longitude), 5.0);
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -21,20 +27,19 @@ class _flutterMapState extends State<flutterMap> {
         backgroundColor: Colors.grey[800],
       ),
       body: FlutterMap(
-        options: MapOptions(center: LatLng(_latitude, _longitude), minZoom: 5.0),
+        mapController: controller,
+        options: MapOptions(center: LatLng(_latitude, _longitude), minZoom: 15.0),
         layers: [
           TileLayerOptions(
-            urlTemplate: "https://www.openstreetmap.org/",
-            subdomains: ['a', 'b', 'c']
+              urlTemplate: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+              subdomains: ['a', 'b', 'c']
           ),
           MarkerLayerOptions(markers: [
             Marker(
-              width: 45.0,
-              height: 45.0,
-              point: LatLng(_latitude, _longitude),
-              builder: (context) => Container(
-                child: IconButton(icon: Icon(Icons.location_on), onPressed: null, color: Colors.red,),
-              )
+                point: LatLng(_latitude, _longitude),
+                builder: (context) => Container(
+                  child: IconButton(icon: Icon(Icons.location_on, color: Colors.red,), onPressed: null,  iconSize: 45.0,),
+                )
             )
           ]),
         ],
