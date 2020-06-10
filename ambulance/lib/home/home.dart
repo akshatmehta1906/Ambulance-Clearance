@@ -32,14 +32,23 @@ class _HomeState extends State<Home> {
           padding: const EdgeInsets.fromLTRB(10.0, 20.0, 10.0, 0.0),
           child: Column(
             children: <Widget>[
-              Text('this is home screen', style: TextStyle(color: Colors.white),),
+              Text('Go to maps', style: TextStyle(color: Colors.white),),
               SizedBox(height: 10.0,),
               RaisedButton(
                 onPressed: (){
                   Navigator.push(context, MaterialPageRoute(builder: (context)=>flutterMap()));
                 },
                 child: Text('location'),
-              )
+              ),
+              SizedBox(height: 30.0,),
+              Text('Get Location', style: TextStyle(color: Colors.white),),
+              SizedBox(height: 10.0,),
+              RaisedButton(
+                onPressed: (){
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=>Location()));
+                },
+                child: Text('Coordinates'),
+              ),
             ],
           ),
         ),
@@ -47,3 +56,44 @@ class _HomeState extends State<Home> {
     );
   }
 }
+
+
+int lat=0;
+int long=0;
+
+class Location extends StatelessWidget {
+
+  final AuthService _auth= AuthService();
+  Position _position;
+  
+  @override
+  Widget build(BuildContext context) {
+    GeolocationExample();
+    return StreamProvider<List<Amb>>.value(value: DatabaseService().users,
+    
+      child: Scaffold(
+        backgroundColor: Colors.grey[850],
+        body: Center(
+          child: Padding(padding: const EdgeInsets.fromLTRB(10.0, 100.0, 10.0, 0.0),
+          child: Column(
+            children: <Widget>[
+              Text('Latitude: a ' 'Longitude: b', style: TextStyle(color: Colors.white),),
+              SizedBox(height: 10.0,),
+              RaisedButton(
+                onPressed: (){
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=>Home()));
+                },
+                child: Text('Back to Home'),
+              ),
+            ],
+          ),
+          ),
+      ),),
+    );
+  }
+}
+
+
+
+
+
