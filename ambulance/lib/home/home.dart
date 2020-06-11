@@ -104,7 +104,7 @@ class GeolocationExampleState extends State {
     LocationOptions locationOptions = LocationOptions(accuracy: LocationAccuracy.high, distanceFilter: 1);
 
     checkPermission();
-    //    updateLocation();
+      updateLocation();
 
     StreamSubscription positionStream = _geolocator.getPositionStream(locationOptions).listen(
             (Position position) {
@@ -141,8 +141,9 @@ class GeolocationExampleState extends State {
   }
 }
 
+
 class GeolocationExample extends StatefulWidget {
   @override
-  GeolocationExampleState createState() => new GeolocationExampleState();
-}
-
+  State<StatefulWidget> createState() {
+    return GeolocationExampleState();
+  }}
