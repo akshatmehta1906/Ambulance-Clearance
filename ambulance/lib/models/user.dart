@@ -9,9 +9,9 @@ class UserData
 {
   final String uid;
   final String name;
-  final String cardata;
-  final String drivingstatus;
+  final double latitude;
+  final double longitude;
 
-  UserData({this.uid, this.name, this.drivingstatus, this.cardata});
+  UserData({this.uid, this.name, this.latitude, this.longitude});
 
 }

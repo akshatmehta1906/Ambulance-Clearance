@@ -1,4 +1,3 @@
-import 'package:ambulance/home/setting_form.dart';
 import 'package:ambulance/models/amb.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:geolocator/geolocator.dart';
@@ -7,8 +6,10 @@ import 'package:flutter/material.dart';
 import 'package:ambulance/services/auth.dart';
 import 'package:ambulance/services/database.dart';
 import 'package:provider/provider.dart';
-import 'package:ambulance/home/user_list.dart';
 import 'package:ambulance/map/flutter_maps.dart';
+import 'package:ambulance/shared/constants.dart';
+import 'package:ambulance/shared/loading.dart';
+import 'package:ambulance/models/user.dart';
 
 
 class Home extends StatefulWidget {
@@ -53,7 +54,7 @@ class _HomeState extends State<Home> {
                 onPressed: (){
                   Navigator.push(context, MaterialPageRoute(builder: (context)=>flutterMap()));
                 },
-                child: Text('location'),
+                child: Text('Location'),
               ),
               SizedBox(height: 30.0,),
               Text('Get Location', style: TextStyle(color: Colors.white),),
@@ -86,8 +87,12 @@ class _HomeState extends State<Home> {
 
 
 class GeolocationExampleState extends State {
+  final _formKey = GlobalKey<FormState>();
   Geolocator _geolocator;
   Position _position;
+  double _lat;
+  double _long;
+
 
   void checkPermission() {
     _geolocator.checkGeolocationPermissionStatus().then((status) { print('status: $status'); });
@@ -123,21 +128,86 @@ class GeolocationExampleState extends State {
     } catch (e) {
       print('Error: ${e.toString()}');
     }
+
+    _lat=_position.latitude.toDouble();
+    _long=_position.longitude.toDouble();
+
+
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Coordinates'),
-      ),
-      body: Center(
-          child: Text(
-              'Latitude: ${_position != null ? _position.latitude.toString() : '0'},'
-                  ' Longitude: ${_position != null ? _position.longitude.toString() : '0'}'
-          )
-      ),
-    );
+
+
+
+    @override
+    Widget build(BuildContext context) {
+
+      final user= Provider.of<User>(context);
+
+      return StreamBuilder<UserData>(
+          stream: DatabaseService(uid: user.uid).userData,
+
+
+
+          builder: (context, snapshot)
+          {
+
+
+              UserData userData=snapshot.data;
+              return Scaffold
+                (
+                appBar: AppBar(
+                  title: Text('Coordinates'),
+                ),
+                key: _formKey,
+                body:SafeArea(
+
+                child:Column
+                  (
+
+                  children: <Widget>[
+
+                    Text(
+                        'Latitude: ${_position != null
+                            ? _position.latitude.toString()
+                            : '0'},'
+                            ' Longitude: ${_position != null ? _position.longitude
+                            .toString() : '0'}'
+
+
+                    ),
+
+
+
+
+                    RaisedButton(
+                      color: Colors.pink,
+                      child: Text(
+                        'Back',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      onPressed: () async{
+
+                        {
+                          await DatabaseService(uid: user.uid).updateUserData(
+                            ' '?? userData.name,
+                            _lat?? userData.latitude,
+                            _long?? userData.longitude,
+                          );
+                          Navigator.pop(context);
+                        }
+                      },
+                    ),
+                  ],
+                ),
+                ),
+              );
+
+          }
+      );
+
+
+
+
   }
 }
 
@@ -147,3 +217,7 @@ class GeolocationExample extends StatefulWidget {
   State<StatefulWidget> createState() {
     return GeolocationExampleState();
   }}
+
+
+
+

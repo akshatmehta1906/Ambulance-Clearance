@@ -79,8 +79,8 @@ class GeolocationExampleState extends State {
                 onChanged:() async {
                   await DatabaseService(uid: user.uid).updateUserData(
                     '  ' ?? userData.name,
-                    _lat ?? userData.cardata,
-                    _long ?? userData.drivingstatus,
+                    _lat ?? userData.latitude,
+                    _long ?? userData.longitude,
                   );
                 }
           );

@@ -10,12 +10,12 @@ class DatabaseService{
 //collection reference
   final CollectionReference userCollection = Firestore.instance.collection('ID');
 
-  Future updateUserData(String name, String cardata, String drivingstatus ) async
+  Future updateUserData(String name, double latitude, double longitude ) async
   {
     return await userCollection.document(uid).setData({
       'name': name,
-      'cardata': cardata,
-      'drivingstatus': drivingstatus,
+      'latitude': latitude,
+      'longitude': longitude,
     });
   }
     //amb list from snapshot
@@ -23,8 +23,8 @@ class DatabaseService{
     return snapshot.documents.map((doc) {
       return Amb(
         name:doc.data['name']?? '',
-        cardata:doc.data['cardata']?? '',
-        drivingstatus:doc.data['drivingstatus']?? '',
+        latitude:doc.data['cardata']?? '',
+        longitude:doc.data['drivingstatus']?? '',
 
       );
     }).toList();
@@ -36,8 +36,8 @@ class DatabaseService{
     return UserData(
       uid: uid,
       name: snapshot.data['name'],
-      cardata: snapshot.data['cardata'],
-      drivingstatus: snapshot.data['drivingstatus'],
+      latitude: snapshot.data['latitude'],
+      longitude: snapshot.data['longitude'],
     );
   }
 

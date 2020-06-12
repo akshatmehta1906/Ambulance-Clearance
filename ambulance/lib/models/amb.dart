@@ -1,9 +1,9 @@
 class Amb{
   final String name;
-  final String cardata;
-  final String drivingstatus;
+  final double latitude;
+  final double longitude;
 
-  Amb({this.name, this.cardata, this.drivingstatus});
+  Amb({this.name, this.latitude, this.longitude});
 
 
 }

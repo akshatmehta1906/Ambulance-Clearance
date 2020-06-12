@@ -18,8 +18,8 @@ class _SettingsFormState extends State<SettingsForm> {
 
   //form values
   String _currentname;
-  String _currentcardata;
-  String _currentdrivingstatus;
+  double _currentlatitude;
+  double _currentlongitude;
 
 
   @override
@@ -56,10 +56,10 @@ class _SettingsFormState extends State<SettingsForm> {
 
                       SizedBox(height: 20),
                       TextFormField(
-                        initialValue: userData.cardata,
+                        //initialValue: userData.latitude,
                         decoration: textInputDecorations,
                         validator: (val) => val.isEmpty ? 'Please car details' : null,
-                        onChanged: (val) => setState(() => _currentcardata = val),
+                        //onChanged: (val) => setState(() => _currentlatitude = val),
                      ),
 
                       SizedBox(height: 20),
@@ -67,7 +67,7 @@ class _SettingsFormState extends State<SettingsForm> {
                     //dropdown
                       DropdownButtonFormField(
                         decoration: textInputDecorations,
-                       value: _currentdrivingstatus, //?? drivingstatus,
+                       value: _currentlongitude, //?? drivingstatus,
 
                         items: drivingst.map((drivingstatus){
                           return DropdownMenuItem(
@@ -75,7 +75,7 @@ class _SettingsFormState extends State<SettingsForm> {
                           child: Text('Do you drive?-$drivingstatus'),
                         );
                       }).toList(),
-                      onChanged: (val)=>setState(()=>_currentdrivingstatus=val),
+                      onChanged: (val)=>setState(()=>_currentlongitude=val),
                     ),
 
                     RaisedButton(
@@ -89,8 +89,8 @@ class _SettingsFormState extends State<SettingsForm> {
                           {
                             await DatabaseService(uid: user.uid).updateUserData(
                               _currentname?? userData.name,
-                              _currentcardata?? userData.cardata,
-                              _currentdrivingstatus?? userData.drivingstatus,
+                              _currentlatitude?? userData.latitude,
+                              _currentlongitude?? userData.longitude,
                             );
                             Navigator.pop(context);
                           }
