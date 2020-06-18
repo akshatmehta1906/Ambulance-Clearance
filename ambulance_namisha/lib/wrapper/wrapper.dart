@@ -3,6 +3,7 @@ import 'package:ambulance/authenticate/authenticate.dart';
 import 'package:provider/provider.dart';
 import 'package:ambulance/models/user.dart';
 import 'package:ambulance/home/home.dart';
+import 'package:ambulance/wrapper/fun.dart';
 
 class Wrapper extends StatelessWidget {
   @override
@@ -18,7 +19,7 @@ class Wrapper extends StatelessWidget {
       }
     else
       {
-        return Home();
+        return Homee();
       }
   }
 }
