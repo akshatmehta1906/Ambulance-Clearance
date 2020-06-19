@@ -133,6 +133,8 @@ class GeolocationExampleState extends State {
     _long=_position.longitude.toDouble();
 
 
+
+
   }
 
 
@@ -144,6 +146,7 @@ class GeolocationExampleState extends State {
       final user= Provider.of<User>(context);
 
       return StreamBuilder<UserData>(
+
           stream: DatabaseService(uid: user.uid).userData,
 
 
