@@ -8,7 +8,6 @@ class Homee extends StatelessWidget {
           children: <Widget>[
             Center(
               child: Image.asset('tools/meme4.jpeg'),
-
             ),
             SizedBox(height: 100.0,),
             Text('For more content like ping in the group')
