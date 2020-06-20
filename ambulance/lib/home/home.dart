@@ -14,8 +14,6 @@ import 'package:ambulance/models/user.dart';
 
 class Home extends StatefulWidget {
 
-
-
   @override
   _HomeState createState() => _HomeState();
 }
@@ -111,10 +109,10 @@ class GeolocationExampleState extends State {
     checkPermission();
     updateLocation();
 
-    StreamSubscription positionStream = _geolocator.getPositionStream(locationOptions).listen(
-            (Position position) {
-          _position = position;
-        });
+    // StreamSubscription positionStream = _geolocator.getPositionStream(locationOptions).listen(
+    //       (Position position) {
+    //    _position = position;
+    //    });
   }
 
   void updateLocation() async {
@@ -200,7 +198,24 @@ class GeolocationExampleState extends State {
 
 
 
+                  RaisedButton(
+                    color: Colors.pink,
+                    child: Text(
+                      'Back',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    onPressed: () async{
 
+                      {
+                        await DatabaseService(uid: user.uid).updateUserData(
+                          ' '?? userData.name,
+                          _lat?? userData.latitude,
+                          _long?? userData.longitude,
+                        );
+                        Navigator.pop(context);
+                      }
+                    },
+                  ),
                 ],
               ),
             ),
@@ -227,7 +242,4 @@ class GeolocationExample extends StatefulWidget {
   State<StatefulWidget> createState() {
     return GeolocationExampleState();
   }}
-
-
-
 
