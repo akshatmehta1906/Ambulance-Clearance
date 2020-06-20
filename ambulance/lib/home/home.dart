@@ -109,7 +109,7 @@ class GeolocationExampleState extends State {
     LocationOptions locationOptions = LocationOptions(accuracy: LocationAccuracy.high, distanceFilter: 1);
 
     checkPermission();
-      updateLocation();
+    updateLocation();
 
     StreamSubscription positionStream = _geolocator.getPositionStream(locationOptions).listen(
             (Position position) {
@@ -132,88 +132,93 @@ class GeolocationExampleState extends State {
     _lat=_position.latitude.toDouble();
     _long=_position.longitude.toDouble();
 
+    final user= Provider.of<User>(context);
+    DatabaseService(uid: user.uid).userData;
+    key: _formKey;
+    //UserData userData=snapshot.data;
+
+    // DatabaseService(uid: user.uid).updateUserData(
+    //     ' '?? userData.name,
+    //     _lat?? userData.latitude,
+    //     _long?? userData.longitude,);
+
+    StreamBuilder<UserData>(
+        stream: DatabaseService(uid: user.uid).userData,
 
 
+
+        builder: (context, snapshot) {
+          UserData userData = snapshot.data;
+          DatabaseService(uid: user.uid).updateUserData(
+              ' ' ?? userData.name,
+              _lat ?? userData.latitude,
+              _long ?? userData.longitude
+          );
+        }
+    );
 
   }
 
+  @override
+  Widget build(BuildContext context) {
+
+    final user= Provider.of<User>(context);
+
+    return StreamBuilder<UserData>(
+        stream: DatabaseService(uid: user.uid).userData,
 
 
 
-    @override
-    Widget build(BuildContext context) {
-
-      final user= Provider.of<User>(context);
-
-      return StreamBuilder<UserData>(
-
-          stream: DatabaseService(uid: user.uid).userData,
+        builder: (context, snapshot)
+        {
 
 
+          UserData userData=snapshot.data;
+          return Scaffold
+            (
+            appBar: AppBar(
+              title: Text('Coordinates'),
+            ),
+            key: _formKey,
+            body:SafeArea(
 
-          builder: (context, snapshot)
-          {
-
-
-              UserData userData=snapshot.data;
-              return Scaffold
+              child:Column
                 (
-                appBar: AppBar(
-                  title: Text('Coordinates'),
-                ),
-                key: _formKey,
-                body:SafeArea(
 
-                child:Column
-                  (
+                children: <Widget>[
 
-                  children: <Widget>[
-
-                    Text(
-                        'Latitude: ${_position != null
-                            ? _position.latitude.toString()
-                            : '0'},'
-                            ' Longitude: ${_position != null ? _position.longitude
-                            .toString() : '0'}'
+                  Text(
+                      'Latitude: ${_position != null
+                          ? _position.latitude.toString()
+                          : '0'},'
+                          ' Longitude: ${_position != null ? _position.longitude
+                          .toString() : '0'}'
 
 
-                    ),
+                  ),
 
 
 
 
-                    RaisedButton(
-                      color: Colors.pink,
-                      child: Text(
-                        'Back',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                      onPressed: () async{
 
-                        {
-                          await DatabaseService(uid: user.uid).updateUserData(
-                            ' '?? userData.name,
-                            _lat?? userData.latitude,
-                            _long?? userData.longitude,
-                          );
-                          Navigator.pop(context);
-                        }
-                      },
-                    ),
-                  ],
-                ),
-                ),
-              );
+                ],
+              ),
+            ),
+          );
 
-          }
-
-          
-      );
+        }
+    );
 
 
 
 
   }
+
+
+
+
+
+
 }
 
 
