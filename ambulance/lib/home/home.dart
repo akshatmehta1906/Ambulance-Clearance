@@ -115,7 +115,13 @@ class GeolocationExampleState extends State {
     //    });
   }
 
+<<<<<<< Updated upstream
   void updateLocation() async {
+=======
+  void
+  updateLocation() async {
+    print("updating ...");
+>>>>>>> Stashed changes
     try {
       Position newPosition = await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.high)
           .timeout(new Duration(seconds: 5));
@@ -123,6 +129,18 @@ class GeolocationExampleState extends State {
       setState(() {
         _position = newPosition;
       });
+<<<<<<< Updated upstream
+=======
+//      await DatabaseService(uid: "XbyZRbkk4jUfgppZzCacALcgAiH3").updateUserData(
+//        'asdfgh ' ?? userData.name,
+//        _lat ?? userData.latitude,
+//        _long ?? userData.longitude,
+//      );
+        Firestore.instance.collection("ID").document("789IsAs3uthnB0Re1oZS9jpQ0Gz2").updateData({
+        'longitude': _position.longitude.toDouble(),
+        'latitude': _position.latitude.toDouble(),
+      });
+>>>>>>> Stashed changes
     } catch (e) {
       print('Error: ${e.toString()}');
     }
