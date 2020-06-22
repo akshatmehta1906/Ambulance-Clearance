@@ -35,10 +35,10 @@ class GeolocationExampleState extends State {
     checkPermission();
     //    updateLocation();
 
-    StreamSubscription positionStream = _geolocator.getPositionStream(locationOptions).listen(
-            (Position position) {
-          _position = position;
-        });
+//    StreamSubscription positionStream = _geolocator.getPositionStream(locationOptions).listen(
+//            (Position position) {
+//          _position = position;
+//        });
   }
 
   void updateLocation() async {
