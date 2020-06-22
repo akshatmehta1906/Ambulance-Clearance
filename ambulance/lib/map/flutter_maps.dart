@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong/latlong.dart';
+import 'dart:async';
 
 class flutterMap extends StatefulWidget {
   @override
@@ -9,12 +10,32 @@ class flutterMap extends StatefulWidget {
 
 class _flutterMapState extends State<flutterMap> {
 
-  MapController controller = MapController();
   double _latitude = 19.1334;
   double _longitude = 72.9133;
+  MapController controller = MapController();
+  MapOptions options = MapOptions(center: LatLng(19.2334, 72.9133), minZoom: 15.0);
+  Timer _timer;
 
   buildMap(){
-    return controller.move(LatLng(_latitude, _longitude), 5.0);
+    _latitude += 0.0001;
+    controller.move(LatLng(_latitude, _longitude), 5.0);
+    return;
+  }
+
+  @override
+  void initState() {
+    _timer = Timer.periodic(Duration(seconds: 1), (Timer t) =>
+        buildMap()
+    );
+
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    _timer.cancel();
+    super.dispose();
   }
 
 
@@ -28,7 +49,7 @@ class _flutterMapState extends State<flutterMap> {
       ),
       body: FlutterMap(
         mapController: controller,
-        options: MapOptions(center: LatLng(_latitude, _longitude), minZoom: 15.0),
+        options: options,
         layers: [
           TileLayerOptions(
               urlTemplate: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
@@ -36,12 +57,17 @@ class _flutterMapState extends State<flutterMap> {
           ),
           MarkerLayerOptions(markers: [
             Marker(
-                point: LatLng(_latitude, _longitude),
+                point: LatLng(19.1334, 72.9133),
                 builder: (context) => Container(
                   child: IconButton(icon: Icon(Icons.location_on, color: Colors.red,), onPressed: null,  iconSize: 45.0,),
                 )
+            ), Marker(
+                point: LatLng(19.1384, 72.9133),
+                builder: (context) => Container(
+                  child: IconButton(icon: Icon(Icons.location_on, color: Colors.blue,), onPressed: null,  iconSize: 45.0,),
+                )
             )
-          ]),
+          ], ),
         ],
       ),
     );
