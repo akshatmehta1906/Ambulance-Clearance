@@ -50,10 +50,10 @@ class _AlarmState extends State<Alarm> {
 
   @override
   void initState() {
-    super.initState();
+
     _assetsAudioPlayer = AssetsAudioPlayer();
     _assetsAudioPlayer.open(Audio("assets/song1.mp3"),);
-    _assetsAudioPlayer.playOrPause();
+    super.initState();
 
 
 
