@@ -76,11 +76,9 @@ class _HomeState extends State<Home> {
       setState(() {
         _position = newPosition;
       });
-//      await DatabaseService(uid: "XbyZRbkk4jUfgppZzCacALcgAiH3").updateUserData(
-//        'asdfgh ' ?? userData.name,
-//        _lat ?? userData.latitude,
-//        _long ?? userData.longitude,
-//      );
+
+
+
       Firestore.instance.collection("ID").document(
           "V4BFp3NYtXhP6WO4DEdOckmD6fH3").updateData({
         'longitude': _position.longitude.toDouble(),
