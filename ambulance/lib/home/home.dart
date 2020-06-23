@@ -10,6 +10,7 @@ import 'package:ambulance/map/flutter_maps.dart';
 import 'package:ambulance/shared/constants.dart';
 import 'package:ambulance/shared/loading.dart';
 import 'package:ambulance/models/user.dart';
+import 'package:ambulance/alarm.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -42,7 +43,7 @@ class _HomeState extends State<Home> {
           child: Column(
             children: <Widget>[
               Text(
-                'Go to maps',
+                'Alarm',
                 style: TextStyle(color: Colors.white),
               ),
               SizedBox(
@@ -51,7 +52,7 @@ class _HomeState extends State<Home> {
               RaisedButton(
                 onPressed: () {
                   Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => flutterMap()));
+                      MaterialPageRoute(builder: (context) => Alarm()));
                 },
                 child: Text('Location'),
               ),
