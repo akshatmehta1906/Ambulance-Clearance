@@ -148,7 +148,7 @@ class _HomeState extends State<Home> {
               RaisedButton(
                 onPressed: () {
                   Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => flutterMap()));
+                      MaterialPageRoute(builder: (context) => Alarm()));
                 },
                 child: Text('Location'),
               ),
