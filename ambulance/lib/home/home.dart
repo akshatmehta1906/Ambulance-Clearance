@@ -12,6 +12,39 @@ import 'package:ambulance/shared/loading.dart';
 import 'package:ambulance/models/user.dart';
 import 'package:ambulance/alarm.dart';
 
+final db= Firestore.instance.collection('ID');
+final ambDB = Firestore.instance.collection('ID').document("V4BFp3NYtXhP6WO4DEdOckmD6fH3");
+
+
+dynamic ambLat() async {
+
+  final documents = await db.where('name', isEqualTo: "ambulance").getDocuments();
+  var ambLat = documents.documents.first.data['latitude'];
+
+  return (ambLat);
+}
+
+dynamic ambLong() async {
+
+  final documents = await db.where('name', isEqualTo: "ambulance").getDocuments();
+  var ambLong = documents.documents.first.data['longitude'];
+
+  return ambLong;
+}
+
+
+dynamic distanceInBetween (double lat2, double long2) async {
+
+  double distanceInMeters;
+
+  distanceInMeters = await Geolocator().distanceBetween(ambLat(),ambLong(),lat2 , long2);
+  return distanceInMeters;
+}
+
+
+
+
+
 
 class Home extends StatefulWidget {
   @override
@@ -27,6 +60,10 @@ class _HomeState extends State<Home> {
   double _long;
   String _name = "no name";
   Timer _timer;
+  double alat;
+  double along;
+  double finaldist;
+
 
 
   void checkPermission() {
@@ -71,6 +108,12 @@ class _HomeState extends State<Home> {
 
   void updateLocation() async {
     print("updating ...");
+
+    alat=ambLat();
+    along=ambLong();
+    finaldist= distanceInBetween( _position.latitude.toDouble(), _position.longitude.toDouble());
+
+
     try {
       Position newPosition = await Geolocator()
           .getCurrentPosition(desiredAccuracy: LocationAccuracy.high)
@@ -79,14 +122,11 @@ class _HomeState extends State<Home> {
       setState(() {
         _position = newPosition;
       });
-//      await DatabaseService(uid: "XbyZRbkk4jUfgppZzCacALcgAiH3").updateUserData(
-//        'asdfgh ' ?? userData.name,
-//        _lat ?? userData.latitude,
-//        _long ?? userData.longitude,
-//      );
+
       Firestore.instance.collection("ID").document("789IsAs3uthnB0Re1oZS9jpQ0Gz2").updateData({
         'longitude': _position.longitude.toDouble(),
         'latitude': _position.latitude.toDouble(),
+        'distance': finaldist,
       });
     } catch (e) {
       print('Error: ${e.toString()}');
@@ -97,8 +137,8 @@ class _HomeState extends State<Home> {
 
     final user = Provider.of<User>(context);
     DatabaseService(uid: user.uid).userData;
-    key:
-    _formKey;
+    key:_formKey;
+
     //UserData userData=snapshot.data;
 
     // DatabaseService(uid: user.uid).updateUserData(
@@ -106,13 +146,7 @@ class _HomeState extends State<Home> {
     //     _lat?? userData.latitude,
     //     _long?? userData.longitude,);
 
-    StreamBuilder<UserData>(
-        stream: DatabaseService(uid: user.uid).userData,
-        builder: (context, snapshot) {
-          UserData userData = snapshot.data;
-          DatabaseService(uid: user.uid).updateUserData(' ' ?? userData.name,
-              _lat ?? userData.latitude, _long ?? userData.longitude);
-        });
+
   }
 
 
@@ -154,9 +188,14 @@ class _HomeState extends State<Home> {
               ),
                Column(
                 children: <Widget>[
-                  Text('Latitude: '
-                      '${_position != null ? _position.latitude.toString() : '0'},'
-                      ' Longitude: ${_position != null ? _position.longitude.toString() : '0'}',),
+                  Text(
+                    'Latitude: ${_position != null ? _lat : '0'},'
+                      ' Longitude: ${_position != null ? _position.longitude.toString() : '0'},'
+                        'Distance: ${_position != null ? finaldist : '0'}'
+                    ,
+
+
+                  ),
 
 
                 ],

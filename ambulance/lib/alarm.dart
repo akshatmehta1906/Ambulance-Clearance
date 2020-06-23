@@ -107,13 +107,7 @@ class _AlarmState extends State<Alarm> {
     _formKey;
 
 
-    StreamBuilder<UserData>(
-        stream: DatabaseService(uid: user.uid).userData,
-        builder: (context, snapshot) {
-          UserData userData = snapshot.data;
-          DatabaseService(uid: user.uid).updateUserData(' ' ?? userData.name,
-              _lat ?? userData.latitude, _long ?? userData.longitude);
-        });
+
   }
 
 
