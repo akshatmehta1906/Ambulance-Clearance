@@ -109,12 +109,11 @@ class _HomeState extends State<Home> {
   void updateLocation() async {
     print("updating ...");
 
-    alat=ambLat();
-    along=ambLong();
-    finaldist= distanceInBetween( _position.latitude.toDouble(), _position.longitude.toDouble());
+
 
 
     try {
+
       Position newPosition = await Geolocator()
           .getCurrentPosition(desiredAccuracy: LocationAccuracy.high)
           .timeout(new Duration(seconds: 5));
@@ -122,6 +121,7 @@ class _HomeState extends State<Home> {
       setState(() {
         _position = newPosition;
       });
+      finaldist= distanceInBetween( _position.latitude.toDouble(), _position.longitude.toDouble());
 
       Firestore.instance.collection("ID").document("6WJEVTcYWWPn6wY4SwsfaW7UGcv2").updateData({
         'longitude': _position.longitude.toDouble(),
