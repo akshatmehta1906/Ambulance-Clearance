@@ -189,12 +189,10 @@ class _HomeState extends State<Home> {
                Column(
                 children: <Widget>[
                   Text(
-                    'Latitude: ${_position.latitude.toString()},'
-                      ' Longitude: ${_position.longitude.toString() },'
-                        'Distance: ${finaldist.toString()}'
+                    'Latitude: ${_position != null ? _position.latitude.toString() : '0'},'
+                      ' Longitude: ${_position != null ? _position.longitude.toString() : '0'},'
+                        'Distance: ${_position != null ? finaldist : '0'}'
                     ,
-
-
                   ),
 
 
