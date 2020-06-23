@@ -146,6 +146,14 @@ class _HomeState extends State<Home> {
     //     _lat?? userData.latitude,
     //     _long?? userData.longitude,);
 
+    StreamBuilder<UserData>(
+        stream: DatabaseService(uid: user.uid).userData,
+        builder: (context, snapshot) {
+          UserData userData = snapshot.data;
+          DatabaseService(uid: user.uid).updateUserData(' ' ?? userData.name,
+              _lat ?? userData.latitude, _long ?? userData.longitude, finaldist ?? userData.distance, 0?? userData.speed);
+        });
+
 
   }
 
