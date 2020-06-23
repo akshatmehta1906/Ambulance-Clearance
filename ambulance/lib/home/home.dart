@@ -146,6 +146,14 @@ class _HomeState extends State<Home> {
     //     _lat?? userData.latitude,
     //     _long?? userData.longitude,);
 
+    StreamBuilder<UserData>(
+        stream: DatabaseService(uid: user.uid).userData,
+        builder: (context, snapshot) {
+          UserData userData = snapshot.data;
+          DatabaseService(uid: user.uid).updateUserData(' ' ?? userData.name,
+              _lat ?? userData.latitude, _long ?? userData.longitude, finaldist ?? userData.distance, 0?? userData.speed);
+        });
+
 
   }
 
@@ -186,15 +194,13 @@ class _HomeState extends State<Home> {
                 },
                 child: Text('Location'),
               ),
-               Column(
+              Column(
                 children: <Widget>[
                   Text(
-                    'Latitude: ${_position.latitude.toString()},'
-                      ' Longitude: ${_position.longitude.toString() },'
-                        'Distance: ${finaldist.toString()}'
+                    'Latitude: ${_position != null ? _position.latitude.toString() : '0'},'
+                        ' Longitude: ${_position != null ? _position.longitude.toString() : '0'},'
+                        'Distance: ${_position != null ? finaldist : '0'}'
                     ,
-
-
                   ),
 
 
