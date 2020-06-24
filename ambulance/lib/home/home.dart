@@ -109,9 +109,8 @@ class _HomeState extends State<Home> {
   void updateLocation() async {
     print("updating ...");
 
-    alat=ambLat();
-    along=ambLong();
-    finaldist= distanceInBetween( _position.latitude.toDouble(), _position.longitude.toDouble());
+
+
 
 
     try {
@@ -122,8 +121,9 @@ class _HomeState extends State<Home> {
       setState(() {
         _position = newPosition;
       });
+      finaldist= distanceInBetween( _position.latitude.toDouble(), _position.longitude.toDouble());
 
-      Firestore.instance.collection("ID").document("789IsAs3uthnB0Re1oZS9jpQ0Gz2").updateData({
+      Firestore.instance.collection("ID").document("6WJEVTcYWWPn6wY4SwsfaW7UGcv2").updateData({
         'longitude': _position.longitude.toDouble(),
         'latitude': _position.latitude.toDouble(),
         'distance': finaldist,
