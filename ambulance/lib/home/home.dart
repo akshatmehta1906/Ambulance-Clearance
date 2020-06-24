@@ -136,12 +136,6 @@ class GeolocationExampleState extends State {
 
   void updateLocation() async {
     print("updating ...");
-<<<<<<< HEAD
-=======
-
-
-
->>>>>>> 5d0a8715899675406113c0a841ecd6c67b85aa75
     try {
       Position newPosition = await Geolocator()
           .getCurrentPosition(desiredAccuracy: LocationAccuracy.high)
@@ -187,52 +181,7 @@ class GeolocationExampleState extends State {
   }
   @override
   Widget build(BuildContext context) {
-<<<<<<< HEAD
     final user = Provider.of<User>(context);
-=======
-    return Scaffold(
-      backgroundColor: Colors.grey[900],
-      appBar: AppBar(
-        title: Text('RastaDo'),
-        centerTitle: true,
-        backgroundColor: Colors.grey[850],
-        actions: <Widget>[
-          FlatButton.icon(
-              onPressed: () async {
-                await _auth.signOut();
-              },
-              icon: Icon(Icons.person),
-              label: Text('Logout')),
-        ],
-      ),
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(10.0, 20.0, 10.0, 0.0),
-          child: Column(
-            children: <Widget>[
-              Text(
-                'Alarm',
-                style: TextStyle(color: Colors.white),
-              ),
-              SizedBox(
-                height: 10.0,
-              ),
-              RaisedButton(
-                onPressed: () {
-//                  Navigator.push(context,
-//                      MaterialPageRoute(builder: (context) => Alarm()));
-                },
-                child: Text('Location'),
-              ),
-              Column(
-                children: <Widget>[
-                  Text(
-                    'Latitude: ${_position != null ? _position.latitude.toString() : '0'},'
-                        ' Longitude: ${_position != null ? _position.longitude.toString() : '0'},'
-                        'Distance: ${_position != null ? finaldist : '0'}'
-                    ,
-                  ),
->>>>>>> 5d0a8715899675406113c0a841ecd6c67b85aa75
 
 
     return StreamBuilder<UserData>(
