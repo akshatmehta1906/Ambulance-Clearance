@@ -10,6 +10,10 @@ import 'package:ambulance/map/flutter_maps.dart';
 import 'package:ambulance/shared/constants.dart';
 import 'package:ambulance/shared/loading.dart';
 import 'package:ambulance/models/user.dart';
+import 'package:great_circle_distance2/great_circle_distance2.dart';
+
+var db= Firestore.instance.collection('ID');
+var ambDB = Firestore.instance.collection('ID').document("V4BFp3NYtXhP6WO4DEdOckmD6fH3");
 
 class Home extends StatefulWidget {
   @override
@@ -25,6 +29,21 @@ class _HomeState extends State<Home> {
   double _long;
   String _name = "no name";
   Timer _timer;
+  double alat;
+  double along;
+  double finaldist;
+
+
+
+
+  double distanceInBetween (double alat, double along, double lat2, double long2)  {
+
+
+    var distanceInMeters = new GreatCircleDistance.fromDegrees(latitude1: alat, longitude1: along, latitude2: lat2, longitude2: long2);
+    return distanceInMeters.haversineDistance() ;
+  }
+
+
 
   void checkPermission() {
     _geolocator.checkGeolocationPermissionStatus().then((status) {
@@ -50,6 +69,8 @@ class _HomeState extends State<Home> {
     _geolocator = Geolocator();
     LocationOptions locationOptions =
     LocationOptions(accuracy: LocationAccuracy.high, distanceFilter: 1);
+
+
 
     checkPermission();
     updateLocation();
@@ -86,6 +107,10 @@ class _HomeState extends State<Home> {
     } catch (e) {
       print('Error: ${e.toString()}');
     }
+
+    dynamic documents = await ambDB.get();
+    alat = documents.data['latitude'];
+    along = documents.data['longitude'];
 
     _lat = _position.latitude.toDouble();
     _long = _position.longitude.toDouble();
@@ -175,6 +200,19 @@ class _HomeState extends State<Home> {
                     ),
                   ),
 
+                  Column(
+                    children: <Widget>[
+                      Text(
+                        'Latitude: ${_position != null ? alat.toString() : '0'},'
+                            ' Longitude: ${_position != null ? along.toString() : '0'},'
+                            'Distance: ${_position != null ? finaldist : '0'}'
+                        ,
+                      ),
+
+
+                    ],
+                  ),
+
 
                 ]
             )
@@ -183,3 +221,7 @@ class _HomeState extends State<Home> {
   }
 
 }
+
+
+
+
