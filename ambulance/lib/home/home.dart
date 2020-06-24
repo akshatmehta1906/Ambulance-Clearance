@@ -111,9 +111,8 @@ class _HomeState extends State<Home> {
 
 
 
-
-
     try {
+
       Position newPosition = await Geolocator()
           .getCurrentPosition(desiredAccuracy: LocationAccuracy.high)
           .timeout(new Duration(seconds: 5));
@@ -189,16 +188,16 @@ class _HomeState extends State<Home> {
               ),
               RaisedButton(
                 onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => Alarm()));
+//                  Navigator.push(context,
+//                      MaterialPageRoute(builder: (context) => Alarm()));
                 },
                 child: Text('Location'),
               ),
-               Column(
+              Column(
                 children: <Widget>[
                   Text(
                     'Latitude: ${_position != null ? _position.latitude.toString() : '0'},'
-                      ' Longitude: ${_position != null ? _position.longitude.toString() : '0'},'
+                        ' Longitude: ${_position != null ? _position.longitude.toString() : '0'},'
                         'Distance: ${_position != null ? finaldist : '0'}'
                     ,
                   ),
