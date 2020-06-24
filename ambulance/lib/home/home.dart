@@ -11,9 +11,6 @@ import 'package:ambulance/shared/constants.dart';
 import 'package:ambulance/shared/loading.dart';
 import 'package:ambulance/models/user.dart';
 
-
-
-
 class Home extends StatefulWidget {
   @override
   _HomeState createState() => _HomeState();
@@ -21,71 +18,6 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   final AuthService _auth = AuthService();
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.grey[900],
-      appBar: AppBar(
-        title: Text('RastaDo'),
-        centerTitle: true,
-        backgroundColor: Colors.grey[850],
-        actions: <Widget>[
-          FlatButton.icon(
-              onPressed: () async {
-                await _auth.signOut();
-              },
-              icon: Icon(Icons.person),
-              label: Text('Logout')),
-        ],
-      ),
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(10.0, 20.0, 10.0, 0.0),
-          child: Column(
-            children: <Widget>[
-              Text(
-                'Go to maps',
-                style: TextStyle(color: Colors.white),
-              ),
-              SizedBox(
-                height: 10.0,
-              ),
-              RaisedButton(
-                onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => flutterMap()));
-                },
-                child: Text('Location'),
-              ),
-              SizedBox(
-                height: 30.0,
-              ),
-              Text(
-                'Get Location',
-                style: TextStyle(color: Colors.white),
-              ),
-              SizedBox(
-                height: 10.0,
-              ),
-              RaisedButton(
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => GeolocationExample()));
-                },
-                child: Text('Coordinates'),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class GeolocationExampleState extends State {
   final _formKey = GlobalKey<FormState>();
   Geolocator _geolocator;
   Position _position;
@@ -144,12 +76,10 @@ class GeolocationExampleState extends State {
       setState(() {
         _position = newPosition;
       });
-//      await DatabaseService(uid: "XbyZRbkk4jUfgppZzCacALcgAiH3").updateUserData(
-//        'asdfgh ' ?? userData.name,
-//        _lat ?? userData.latitude,
-//        _long ?? userData.longitude,
-//      );
-      Firestore.instance.collection("ID").document("789IsAs3uthnB0Re1oZS9jpQ0Gz2").updateData({
+
+
+      Firestore.instance.collection("ID").document(
+          "6WJEVTcYWWPn6wY4SwsfaW7UGcv2").updateData({
         'longitude': _position.longitude.toDouble(),
         'latitude': _position.latitude.toDouble(),
       });
@@ -164,73 +94,92 @@ class GeolocationExampleState extends State {
     DatabaseService(uid: user.uid).userData;
     key:
     _formKey;
-    //UserData userData=snapshot.data;
 
-    // DatabaseService(uid: user.uid).updateUserData(
-    //     ' '?? userData.name,
-    //     _lat?? userData.latitude,
-    //     _long?? userData.longitude,);
 
     StreamBuilder<UserData>(
         stream: DatabaseService(uid: user.uid).userData,
         builder: (context, snapshot) {
           UserData userData = snapshot.data;
           DatabaseService(uid: user.uid).updateUserData(' ' ?? userData.name,
-              _lat ?? userData.latitude, _long ?? userData.longitude, 0 ?? userData.speed, 0 ?? userData.distance);
+              _lat ?? userData.latitude, _long ?? userData.longitude,
+              0 ?? userData.speed, 0 ?? userData.distance);
         });
   }
+
+
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<User>(context);
+    return Scaffold(
+        backgroundColor: Colors.grey[900],
+        appBar: AppBar(
+          title: Text('RastaDo'),
+          centerTitle: true,
+          backgroundColor: Colors.grey[850],
+          actions: <Widget>[
+            FlatButton.icon(
+                onPressed: () async {
+                  await _auth.signOut();
+                },
+                icon: Icon(Icons.person),
+                label: Text('Logout')),
+          ],
+        ),
 
-
-    return StreamBuilder<UserData>(
-        stream: DatabaseService(uid: user.uid).userData,
-        builder: (context, snapshot) {
-          UserData userData = snapshot.data;
-          return Scaffold(
-            appBar: AppBar(
-              title: Text('Coordinates'),
-            ),
-            key: _formKey,
-            body: SafeArea(
-              child: Column(
+        resizeToAvoidBottomPadding: false,
+        body: SafeArea
+          (
+            child: Column
+              (
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Text('Latitude: '
-                      '${_position != null ? _position.latitude.toString() : '0'},'
-                      ' Longitude: ${_position != null ? _position.longitude.toString() : '0'}',),
-
-                  RaisedButton(
-                    color: Colors.pink,
-                    child: Text(
-                      'Back',
-                      style: TextStyle(color: Colors.white),
+                  Container
+                    (
+                    child: Stack
+                      (
+                      children: <Widget>[
+                        Container
+                          (
+                          padding: EdgeInsets.fromLTRB(15.0, 110.0, 0.0, 0.0),
+                          child: Text
+                            (
+                            'Hello.',
+                            style:
+                            TextStyle
+                              (
+                              fontSize: 45.0,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                    onPressed: () async {
-//                      {
-//                        await DatabaseService(uid: user.uid).updateUserData(
-//                          'asdfgh ' ?? userData.name,
-//                          _lat ?? userData.latitude,
-//                          _long ?? userData.longitude,
-//                        );
-                      Navigator.pop(context);
-//                      }
-                    },
                   ),
-                ],
-              ),
-            ),
-          );
-        });
+
+                  Container(
+                    child: Stack(
+                      children: <Widget>[
+                        Container(
+                          padding: EdgeInsets.fromLTRB(15.0, 5.0, 0.0, 0.0),
+                          child: Text(
+                            'Your journey has started',
+                            style:
+                            TextStyle(
+                              fontSize: 45.0,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+
+
+                ]
+            )
+        )
+    );
   }
+
 }
-
-class GeolocationExample extends StatefulWidget {
-  @override
-  State<StatefulWidget> createState() {
-    return GeolocationExampleState();
-  }
-}
-
-
-
