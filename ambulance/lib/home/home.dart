@@ -12,7 +12,6 @@ import 'package:ambulance/shared/loading.dart';
 import 'package:ambulance/models/user.dart';
 import 'package:great_circle_distance2/great_circle_distance2.dart';
 import 'package:ambulance/alarm.dart';
-import 'package:flutter_conditional_rendering/conditional.dart';
 
 var db= Firestore.instance.collection('ID');
 var ambDB = Firestore.instance.collection('ID').document("V4BFp3NYtXhP6WO4DEdOckmD6fH3");
@@ -44,8 +43,8 @@ class _HomeState extends State<Home> {
   double distanceInBetween (double alat, double along, double lat2, double long2)  {
 
 
-    var distanceInMeters = new GreatCircleDistance.fromDegrees(latitude1: alat, longitude1: along, latitude2: lat2, longitude2: long2);
-    return distanceInMeters.haversineDistance() ;
+    var gcd = new GreatCircleDistance.fromDegrees(latitude1: alat, longitude1: along, latitude2: lat2, longitude2: long2);
+    return gcd.haversineDistance() ;
   }
 
 
@@ -108,7 +107,7 @@ class _HomeState extends State<Home> {
           "6WJEVTcYWWPn6wY4SwsfaW7UGcv2").updateData({
         'longitude': _position.longitude.toDouble(),
         'latitude': _position.latitude.toDouble(),
-       'distance': finaldist,
+//        'distance': finaldist,
       });
     } catch (e) {
       print('Error: ${e.toString()}');
@@ -124,10 +123,10 @@ class _HomeState extends State<Home> {
 
     finaldist = distanceInBetween(alat, along, _lat, _long);
 
-    if(finaldist < 300000)
-      {
-        check =1;
-      }
+    if(finaldist < 3000000)
+    {
+      check =1;
+    }
 
     final user = Provider.of<User>(context);
     DatabaseService(uid: user.uid).userData;
@@ -151,9 +150,9 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     if (check == 1)
-      {
-        return Alarm();
-      }
+    {
+      return Alarm();
+    }
     else {
       return Scaffold(
           backgroundColor: Colors.grey[900],
@@ -220,19 +219,30 @@ class _HomeState extends State<Home> {
                         ],
                       ),
                     ),
-                    Column(
-                      children: <Widget>[
-                        Text(
-                          'Latitude: ${_position != null
-                              ? alat.toString()
-                              : '0'},'
-                              ' Longitude: ${_position != null ? along
-                              .toString() : '0'},'
-                              'Distance: ${_position != null ? finaldist
-                              .toString() : '0'}',
-                        ),
-
-                      ],
+                    Container(
+                      child: Stack(
+                        children: <Widget>[
+                          Container(
+                            padding: EdgeInsets.fromLTRB(15.0, 5.0, 0.0, 0.0),
+                            child: Text(
+                              'Latitude: ${_position != null
+                                  ? alat.toString()
+                                  : '0'},'
+                                  ' Longitude: ${_position != null ? along
+                                  .toString() : '0'},'
+                                  'Distance: ${_position != null ? finaldist
+                                  .toString() : '0'}'
+                              ,
+                              style:
+                              TextStyle(
+                                fontSize: 25.0,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ]
               )
@@ -243,9 +253,3 @@ class _HomeState extends State<Home> {
   }
 
 }
-
-
-
-
-
-
