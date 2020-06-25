@@ -1,3 +1,4 @@
+import 'package:ambulance/alarm.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong/latlong.dart';
 import 'dart:async';
@@ -55,7 +56,6 @@ class _flutterMapState extends State<flutterMap> {
           "6WJEVTcYWWPn6wY4SwsfaW7UGcv2").updateData({
         'longitude': _position.longitude.toDouble(),
         'latitude': _position.latitude.toDouble(),
-//        'distance': finaldist,
       });
     } catch (e) {
       print('Error: ${e.toString()}');
@@ -104,8 +104,7 @@ class _flutterMapState extends State<flutterMap> {
     }
 
   buildMap(){
-    _lat += 0.0001;
-    controller.move(LatLng(_lat, _long), 5.0);
+    controller.move(LatLng(alat, along), 5.0);
     return;
   }
 
@@ -121,9 +120,12 @@ class _flutterMapState extends State<flutterMap> {
       checkPermission();
       updateLocation();
 
-      _timer = Timer.periodic(Duration(seconds: 3), (Timer t) {
+
+
+      _timer = Timer.periodic(Duration(seconds: 5), (Timer t) {
         updateLocation();
-        flutterMap();
+        buildMap();
+
 
       }
       );
@@ -148,6 +150,9 @@ class _flutterMapState extends State<flutterMap> {
           title: Text('Maps'),
           centerTitle: true,
           backgroundColor: Colors.grey[800],
+
+
+
         ),
         body: FlutterMap(
           mapController: controller,
@@ -167,7 +172,8 @@ class _flutterMapState extends State<flutterMap> {
                           onPressed: null,
                           iconSize: 45.0,),
                       )
-              ), Marker(
+              ),
+              Marker(
                   point: LatLng(alat, along),
                   builder: (context) =>
                       Container(

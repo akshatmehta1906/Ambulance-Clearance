@@ -253,6 +253,16 @@ class _AlarmState extends State<Alarm> {
                       ),
                     ),
 
+                    RaisedButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => flutterMap()),
+                        );
+                      },
+                      child: Text('Go to Maps'),
+                    )
+
 
 
 
