@@ -75,7 +75,7 @@ class _AlarmState extends State<Alarm> {
     super.initState();
 
     _assetsAudioPlayer = AssetsAudioPlayer();
-    _assetsAudioPlayer.open(Audio("assets/song2.mp3"),);
+    _assetsAudioPlayer.open(Audio("assets/song1.mp3"),);
 
 
 
@@ -116,7 +116,7 @@ class _AlarmState extends State<Alarm> {
           "6WJEVTcYWWPn6wY4SwsfaW7UGcv2").updateData({
         'longitude': _position.longitude.toDouble(),
         'latitude': _position.latitude.toDouble(),
-//        'distance': finaldist,
+        'distance': finaldist,
       });
     } catch (e) {
       print('Error: ${e.toString()}');
@@ -134,7 +134,7 @@ class _AlarmState extends State<Alarm> {
 
     if(finaldist > 3000000)
     {
-      check =0;
+      check = 0;
     }
 
     final user = Provider.of<User>(context);

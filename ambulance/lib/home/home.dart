@@ -13,6 +13,7 @@ import 'package:ambulance/models/user.dart';
 import 'package:great_circle_distance2/great_circle_distance2.dart';
 import 'package:ambulance/alarm.dart';
 
+
 var db= Firestore.instance.collection('ID');
 var ambDB = Firestore.instance.collection('ID').document("V4BFp3NYtXhP6WO4DEdOckmD6fH3");
 
@@ -27,11 +28,11 @@ class _HomeState extends State<Home> {
   Geolocator _geolocator;
   Position _position;
   double _lat;
-  double _long;
+  double _long ;
   String _name = "no name";
   Timer _timer;
-  double alat;
-  double along;
+  double alat ;
+  double along ;
   double finaldist;
   int check = 0;
 
@@ -43,8 +44,8 @@ class _HomeState extends State<Home> {
   double distanceInBetween (double alat, double along, double lat2, double long2)  {
 
 
-    var gcd = new GreatCircleDistance.fromDegrees(latitude1: alat, longitude1: along, latitude2: lat2, longitude2: long2);
-    return gcd.haversineDistance() ;
+    var distanceInMeters = new GreatCircleDistance.fromDegrees(latitude1: alat, longitude1: along, latitude2: lat2, longitude2: long2);
+    return distanceInMeters.haversineDistance() ;
   }
 
 
@@ -107,7 +108,7 @@ class _HomeState extends State<Home> {
           "6WJEVTcYWWPn6wY4SwsfaW7UGcv2").updateData({
         'longitude': _position.longitude.toDouble(),
         'latitude': _position.latitude.toDouble(),
-//        'distance': finaldist,
+        'distance': finaldist,
       });
     } catch (e) {
       print('Error: ${e.toString()}');
