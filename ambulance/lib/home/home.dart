@@ -8,7 +8,6 @@ import 'package:ambulance/services/database.dart';
 import 'package:provider/provider.dart';
 import 'package:ambulance/map/flutter_maps.dart';
 import 'package:ambulance/shared/constants.dart';
-import 'package:ambulance/shared/loading.dart';
 import 'package:ambulance/models/user.dart';
 import 'package:great_circle_distance2/great_circle_distance2.dart';
 import 'package:ambulance/alarm.dart';
