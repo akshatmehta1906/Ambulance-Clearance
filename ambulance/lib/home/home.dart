@@ -123,7 +123,7 @@ class _HomeState extends State<Home> {
 
     finaldist = distanceInBetween(alat, along, _lat, _long);
 
-    if(finaldist < 300000)
+    if(finaldist < 3000000)
     {
       check =1;
     }

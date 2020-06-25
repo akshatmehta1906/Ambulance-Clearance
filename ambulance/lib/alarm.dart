@@ -1,3 +1,4 @@
+import 'package:ambulance/home/home.dart';
 import 'package:flutter/material.dart';
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -37,6 +38,8 @@ class _AlarmState extends State<Alarm> {
   double alat;
   double along;
   double finaldist;
+  int check = 1;
+
 
 
 
@@ -128,6 +131,11 @@ class _AlarmState extends State<Alarm> {
 
     finaldist=distanceInBetween(alat, along, _lat, _long);
 
+    if(finaldist > 3000000)
+    {
+      check =0;
+    }
+
     final user = Provider.of<User>(context);
     DatabaseService(uid: user.uid).userData;
     key:
@@ -147,90 +155,100 @@ class _AlarmState extends State<Alarm> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        backgroundColor: Colors.grey[900],
-        appBar: AppBar(
-          title: Text('ALERT!'),
-          centerTitle: true,
-          backgroundColor: Colors.grey[850],
-          actions: <Widget>[
-            FlatButton.icon(
-                onPressed: () async {
-                  await _auth.signOut();
-                },
-                icon: Icon(Icons.person),
-                label: Text('Logout')),
-          ],
-        ),
+    if (check == 0) {
+      return Home();
+    }
 
-        resizeToAvoidBottomPadding: false,
-        body: SafeArea
-          (
-            child: Column
-              (
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Container
-                    (
-                    child: Stack
+    else {
+      return Scaffold(
+          backgroundColor: Colors.grey[900],
+          appBar: AppBar(
+            title: Text('ALERT!'),
+            centerTitle: true,
+            backgroundColor: Colors.grey[850],
+            actions: <Widget>[
+              FlatButton.icon(
+                  onPressed: () async {
+                    await _auth.signOut();
+                  },
+                  icon: Icon(Icons.person),
+                  label: Text('Logout')),
+            ],
+          ),
+
+          resizeToAvoidBottomPadding: false,
+          body: SafeArea
+            (
+              child: Column
+                (
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Container
                       (
-                      children: <Widget>[
-                        Container
-                          (
-                          padding: EdgeInsets.fromLTRB(15.0, 110.0, 0.0, 0.0),
-                          child: Text
+                      child: Stack
+                        (
+                        children: <Widget>[
+                          Container
                             (
-                            'There is an',
-                            style:
-                            TextStyle
+                            padding: EdgeInsets.fromLTRB(15.0, 110.0, 0.0, 0.0),
+                            child: Text
                               (
-                              fontSize: 45.0,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
+                              'There is an',
+                              style:
+                              TextStyle
+                                (
+                                fontSize: 45.0,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
                             ),
                           ),
-                        ),
-                      ],
-                    ),
-                  ),
-
-                  Container(
-                    child: Stack(
-                      children: <Widget>[
-                        Container(
-                          padding: EdgeInsets.fromLTRB(15.0, 5.0, 0.0, 0.0),
-                          child: Text(
-                            'Ambulance near you',
-                            style:
-                            TextStyle(
-                              fontSize: 45.0,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-
-                  Column(
-                    children: <Widget>[
-                      Text(
-                        'Latitude: ${_position != null ? alat.toString() : '0'},'
-                            ' Longitude: ${_position != null ? along.toString() : '0'},'
-                            'Distance: ${_position != null ? finaldist.toString() : '0'}'
-                        ,
+                        ],
                       ),
+                    ),
+
+                    Container(
+                      child: Stack(
+                        children: <Widget>[
+                          Container(
+                            padding: EdgeInsets.fromLTRB(15.0, 5.0, 0.0, 0.0),
+                            child: Text(
+                              'Ambulance near you',
+                              style:
+                              TextStyle(
+                                fontSize: 45.0,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+
+                    Column(
+                      children: <Widget>[
+                        Text(
+                          'Latitude: ${_position != null
+                              ? alat.toString()
+                              : '0'},'
+                              ' Longitude: ${_position != null ? along
+                              .toString() : '0'},'
+                              'Distance: ${_position != null ? finaldist
+                              .toString() : '0'}'
+                          ,
+                        ),
 
 
-                    ],
-                  ),
+                      ],
+                    ),
 
 
-                ]
-            )
-        )
-    );
+                  ]
+              )
+          )
+      );
+    }
   }
 
 }
