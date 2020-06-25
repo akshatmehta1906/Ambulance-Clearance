@@ -226,22 +226,33 @@ class _AlarmState extends State<Alarm> {
                       ),
                     ),
 
-                    Column(
-                      children: <Widget>[
-                        Text(
-                          'Latitude: ${_position != null
-                              ? alat.toString()
-                              : '0'},'
-                              ' Longitude: ${_position != null ? along
-                              .toString() : '0'},'
-                              'Distance: ${_position != null ? finaldist
-                              .toString() : '0'}'
-                          ,
-                        ),
-
-
-                      ],
+                    Container(
+                      child: Stack(
+                        children: <Widget>[
+                          Container(
+                            padding: EdgeInsets.fromLTRB(15.0, 5.0, 0.0, 0.0),
+                            child: Text(
+                              'Latitude: ${_position != null
+                                  ? alat.toString()
+                                  : '0'},'
+                                  ' Longitude: ${_position != null ? along
+                                  .toString() : '0'},'
+                                  'Distance: ${_position != null ? finaldist
+                                  .toString() : '0'}'
+                              ,
+                              style:
+                              TextStyle(
+                                fontSize: 25.0,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
+
+
 
 
                   ]
