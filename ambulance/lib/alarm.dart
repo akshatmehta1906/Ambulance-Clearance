@@ -10,6 +10,10 @@ import 'package:provider/provider.dart';
 import 'package:ambulance/map/flutter_maps.dart';
 import 'package:ambulance/shared/constants.dart';
 import 'package:ambulance/models/user.dart';
+import 'package:great_circle_distance2/great_circle_distance2.dart';
+
+var db= Firestore.instance.collection('ID');
+var ambDB = Firestore.instance.collection('ID').document("V4BFp3NYtXhP6WO4DEdOckmD6fH3");
 
 
 void main() => runApp(Alarm());
@@ -20,8 +24,9 @@ class Alarm extends StatefulWidget {
 }
 
 class _AlarmState extends State<Alarm> {
-
   AssetsAudioPlayer _assetsAudioPlayer;
+
+  final AuthService _auth = AuthService();
   final _formKey = GlobalKey<FormState>();
   Geolocator _geolocator;
   Position _position;
@@ -29,6 +34,21 @@ class _AlarmState extends State<Alarm> {
   double _long;
   String _name = "no name";
   Timer _timer;
+  double alat;
+  double along;
+  double finaldist;
+
+
+
+
+  double distanceInBetween (double alat, double along, double lat2, double long2)  {
+
+
+    var distanceInMeters = new GreatCircleDistance.fromDegrees(latitude1: alat, longitude1: along, latitude2: lat2, longitude2: long2);
+    return distanceInMeters.haversineDistance() ;
+  }
+
+
 
   void checkPermission() {
     _geolocator.checkGeolocationPermissionStatus().then((status) {
@@ -47,19 +67,19 @@ class _AlarmState extends State<Alarm> {
       });
   }
 
-
   @override
   void initState() {
 
     _assetsAudioPlayer = AssetsAudioPlayer();
     _assetsAudioPlayer.open(Audio("assets/song1.mp3"),);
+
     super.initState();
-
-
 
     _geolocator = Geolocator();
     LocationOptions locationOptions =
     LocationOptions(accuracy: LocationAccuracy.high, distanceFilter: 1);
+
+
 
     checkPermission();
     updateLocation();
@@ -67,10 +87,7 @@ class _AlarmState extends State<Alarm> {
     _timer = Timer.periodic(Duration(seconds: 3), (Timer t) =>
         updateLocation()
     );
-
   }
-
-
 
   @override
   void dispose() {
@@ -90,16 +107,26 @@ class _AlarmState extends State<Alarm> {
         _position = newPosition;
       });
 
-      Firestore.instance.collection("ID").document("789IsAs3uthnB0Re1oZS9jpQ0Gz2").updateData({
+
+      Firestore.instance.collection("ID").document(
+          "6WJEVTcYWWPn6wY4SwsfaW7UGcv2").updateData({
         'longitude': _position.longitude.toDouble(),
         'latitude': _position.latitude.toDouble(),
+//        'distance': finaldist,
       });
     } catch (e) {
       print('Error: ${e.toString()}');
     }
 
+    dynamic documents = await ambDB.get();
+    alat = documents.data['latitude'];
+    along = documents.data['longitude'];
+
+
     _lat = _position.latitude.toDouble();
     _long = _position.longitude.toDouble();
+
+    finaldist=distanceInBetween(alat, along, _lat, _long);
 
     final user = Provider.of<User>(context);
     DatabaseService(uid: user.uid).userData;
@@ -107,23 +134,103 @@ class _AlarmState extends State<Alarm> {
     _formKey;
 
 
-
+    StreamBuilder<UserData>(
+        stream: DatabaseService(uid: user.uid).userData,
+        builder: (context, snapshot) {
+          UserData userData = snapshot.data;
+          DatabaseService(uid: user.uid).updateUserData(' ' ?? userData.name,
+              _lat ?? userData.latitude, _long ?? userData.longitude,
+              0 ?? userData.speed, 0 ?? userData.distance);
+        });
   }
-
-
-
 
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
+    return Scaffold(
         backgroundColor: Colors.grey[900],
         appBar: AppBar(
-          title: const Text('Asset Audio Example'),
+          title: Text('ALERT!'),
+          centerTitle: true,
+          backgroundColor: Colors.grey[850],
+          actions: <Widget>[
+            FlatButton.icon(
+                onPressed: () async {
+                  await _auth.signOut();
+                },
+                icon: Icon(Icons.person),
+                label: Text('Logout')),
+          ],
         ),
-        body: Container(),
-      ),
+
+        resizeToAvoidBottomPadding: false,
+        body: SafeArea
+          (
+            child: Column
+              (
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Container
+                    (
+                    child: Stack
+                      (
+                      children: <Widget>[
+                        Container
+                          (
+                          padding: EdgeInsets.fromLTRB(15.0, 110.0, 0.0, 0.0),
+                          child: Text
+                            (
+                            'There is an',
+                            style:
+                            TextStyle
+                              (
+                              fontSize: 45.0,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  Container(
+                    child: Stack(
+                      children: <Widget>[
+                        Container(
+                          padding: EdgeInsets.fromLTRB(15.0, 5.0, 0.0, 0.0),
+                          child: Text(
+                            'Ambulance near you',
+                            style:
+                            TextStyle(
+                              fontSize: 45.0,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  Column(
+                    children: <Widget>[
+                      Text(
+                        'Latitude: ${_position != null ? alat.toString() : '0'},'
+                            ' Longitude: ${_position != null ? along.toString() : '0'},'
+                            'Distance: ${_position != null ? finaldist.toString() : '0'}'
+                        ,
+                      ),
+
+
+                    ],
+                  ),
+
+
+                ]
+            )
+        )
     );
   }
+
 }

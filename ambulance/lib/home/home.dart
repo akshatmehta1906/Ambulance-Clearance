@@ -11,6 +11,7 @@ import 'package:ambulance/shared/constants.dart';
 import 'package:ambulance/shared/loading.dart';
 import 'package:ambulance/models/user.dart';
 import 'package:great_circle_distance2/great_circle_distance2.dart';
+import 'package:ambulance/alarm.dart';
 
 var db= Firestore.instance.collection('ID');
 var ambDB = Firestore.instance.collection('ID').document("V4BFp3NYtXhP6WO4DEdOckmD6fH3");
@@ -32,6 +33,9 @@ class _HomeState extends State<Home> {
   double alat;
   double along;
   double finaldist;
+  int check = 0;
+
+
 
 
 
@@ -39,8 +43,8 @@ class _HomeState extends State<Home> {
   double distanceInBetween (double alat, double along, double lat2, double long2)  {
 
 
-    var distanceInMeters = new GreatCircleDistance.fromDegrees(latitude1: alat, longitude1: along, latitude2: lat2, longitude2: long2);
-    return distanceInMeters.haversineDistance() ;
+    var gcd = new GreatCircleDistance.fromDegrees(latitude1: alat, longitude1: along, latitude2: lat2, longitude2: long2);
+    return gcd.haversineDistance() ;
   }
 
 
@@ -103,6 +107,7 @@ class _HomeState extends State<Home> {
           "6WJEVTcYWWPn6wY4SwsfaW7UGcv2").updateData({
         'longitude': _position.longitude.toDouble(),
         'latitude': _position.latitude.toDouble(),
+//        'distance': finaldist,
       });
     } catch (e) {
       print('Error: ${e.toString()}');
@@ -112,8 +117,16 @@ class _HomeState extends State<Home> {
     alat = documents.data['latitude'];
     along = documents.data['longitude'];
 
+
     _lat = _position.latitude.toDouble();
     _long = _position.longitude.toDouble();
+
+    finaldist = distanceInBetween(alat, along, _lat, _long);
+
+    if(finaldist < 300000)
+    {
+      check =1;
+    }
 
     final user = Provider.of<User>(context);
     DatabaseService(uid: user.uid).userData;
@@ -129,99 +142,103 @@ class _HomeState extends State<Home> {
               _lat ?? userData.latitude, _long ?? userData.longitude,
               0 ?? userData.speed, 0 ?? userData.distance);
         });
-  }
 
+
+
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        backgroundColor: Colors.grey[900],
-        appBar: AppBar(
-          title: Text('RastaDo'),
-          centerTitle: true,
-          backgroundColor: Colors.grey[850],
-          actions: <Widget>[
-            FlatButton.icon(
-                onPressed: () async {
-                  await _auth.signOut();
-                },
-                icon: Icon(Icons.person),
-                label: Text('Logout')),
-          ],
-        ),
+    if (check == 1)
+    {
+      return Alarm();
+    }
+    else {
+      return Scaffold(
+          backgroundColor: Colors.grey[900],
+          appBar: AppBar(
+            title: Text('RastaDo'),
+            centerTitle: true,
+            backgroundColor: Colors.grey[850],
+            actions: <Widget>[
+              FlatButton.icon(
+                  onPressed: () async {
+                    await _auth.signOut();
+                  },
+                  icon: Icon(Icons.person),
+                  label: Text('Logout')),
+            ],
+          ),
 
-        resizeToAvoidBottomPadding: false,
-        body: SafeArea
-          (
-            child: Column
-              (
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Container
-                    (
-                    child: Stack
+          resizeToAvoidBottomPadding: false,
+          body: SafeArea
+            (
+              child: Column
+                (
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Container
                       (
-                      children: <Widget>[
-                        Container
-                          (
-                          padding: EdgeInsets.fromLTRB(15.0, 110.0, 0.0, 0.0),
-                          child: Text
+                      child: Stack
+                        (
+                        children: <Widget>[
+                          Container
                             (
-                            'Hello.',
-                            style:
-                            TextStyle
+                            padding: EdgeInsets.fromLTRB(15.0, 110.0, 0.0, 0.0),
+                            child: Text
                               (
-                              fontSize: 45.0,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
+                              'No Ambulance',
+                              style:
+                              TextStyle
+                                (
+                                fontSize: 45.0,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
                             ),
                           ),
-                        ),
-                      ],
-                    ),
-                  ),
-
-                  Container(
-                    child: Stack(
-                      children: <Widget>[
-                        Container(
-                          padding: EdgeInsets.fromLTRB(15.0, 5.0, 0.0, 0.0),
-                          child: Text(
-                            'Your journey has started',
-                            style:
-                            TextStyle(
-                              fontSize: 45.0,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-
-                  Column(
-                    children: <Widget>[
-                      Text(
-                        'Latitude: ${_position != null ? alat.toString() : '0'},'
-                            ' Longitude: ${_position != null ? along.toString() : '0'},'
-                            'Distance: ${_position != null ? finaldist : '0'}'
-                        ,
+                        ],
                       ),
+                    ),
 
+                    Container(
+                      child: Stack(
+                        children: <Widget>[
+                          Container(
+                            padding: EdgeInsets.fromLTRB(15.0, 5.0, 0.0, 0.0),
+                            child: Text(
+                              'Near You.',
+                              style:
+                              TextStyle(
+                                fontSize: 45.0,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Column(
+                      children: <Widget>[
+                        Text(
+                          'Latitude: ${_position != null
+                              ? alat.toString()
+                              : '0'},'
+                              ' Longitude: ${_position != null ? along
+                              .toString() : '0'},'
+                              'Distance: ${_position != null ? finaldist
+                              .toString() : '0'}',
+                        ),
 
-                    ],
-                  ),
+                      ],
+                    ),
+                  ]
+              )
+          )
+      );
+    }
 
-
-                ]
-            )
-        )
-    );
   }
 
 }
-
-
-
-
