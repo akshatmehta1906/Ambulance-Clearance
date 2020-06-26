@@ -12,6 +12,7 @@ import 'package:ambulance/map/flutter_maps.dart';
 import 'package:ambulance/shared/constants.dart';
 import 'package:ambulance/models/user.dart';
 import 'package:great_circle_distance2/great_circle_distance2.dart';
+import 'dart:math';
 
 var db= Firestore.instance.collection('ID');
 var ambDB = Firestore.instance.collection('ID').document("V4BFp3NYtXhP6WO4DEdOckmD6fH3");
@@ -39,6 +40,7 @@ class _AlarmState extends State<Alarm> {
   double along;
   double finaldist;
   int check = 1;
+  double _speed;
 
 
 
@@ -116,7 +118,7 @@ class _AlarmState extends State<Alarm> {
           "6WJEVTcYWWPn6wY4SwsfaW7UGcv2").updateData({
         'longitude': _position.longitude.toDouble(),
         'latitude': _position.latitude.toDouble(),
-//        'distance': finaldist,
+        'distance': finaldist,
       });
     } catch (e) {
       print('Error: ${e.toString()}');
@@ -132,7 +134,7 @@ class _AlarmState extends State<Alarm> {
 
     finaldist=distanceInBetween(alat, along, _lat, _long);
 
-    if(finaldist > 3000000)
+    if(finaldist > 1500)
     {
       check =0;
     }
@@ -149,7 +151,7 @@ class _AlarmState extends State<Alarm> {
           UserData userData = snapshot.data;
           DatabaseService(uid: user.uid).updateUserData(' ' ?? userData.name,
               _lat ?? userData.latitude, _long ?? userData.longitude,
-              0 ?? userData.speed, 0 ?? userData.distance);
+              _speed ?? userData.speed, 0 ?? userData.distance);
         });
   }
 
@@ -233,18 +235,13 @@ class _AlarmState extends State<Alarm> {
                           Container(
                             padding: EdgeInsets.fromLTRB(15.0, 5.0, 0.0, 0.0),
                             child: Text(
-                              'Latitude: ${_position != null
-                                  ? alat.toString()
-                                  : '0'},'
-                                  ' Longitude: ${_position != null ? along
-                                  .toString() : '0'},'
+
                                   'Distance: ${_position != null ? finaldist
                                   .toString() : '0'}'
                               ,
                               style:
                               TextStyle(
-                                fontSize: 25.0,
-                                fontWeight: FontWeight.bold,
+                                fontSize: 15.0,
                                 color: Colors.white,
                               ),
                             ),
@@ -253,15 +250,21 @@ class _AlarmState extends State<Alarm> {
                       ),
                     ),
 
+
+                    SizedBox(height: 10.0),
+
+                    SizedBox(height: 50),
                     RaisedButton(
+                        color: Colors.blue[400],
+                        child: Text('Go To Maps',
+                            style: TextStyle(color: Colors.white)),
                       onPressed: () {
                         Navigator.push(
                           context,
                           MaterialPageRoute(builder: (context) => flutterMap()),
                         );
                       },
-                      child: Text('Go to Maps'),
-                    )
+                    ),
 
 
 

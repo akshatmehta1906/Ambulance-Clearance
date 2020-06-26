@@ -11,6 +11,7 @@ import 'package:ambulance/shared/constants.dart';
 import 'package:ambulance/models/user.dart';
 import 'package:great_circle_distance2/great_circle_distance2.dart';
 import 'package:ambulance/alarm.dart';
+import 'dart:math';
 
 var db= Firestore.instance.collection('ID');
 var ambDB = Firestore.instance.collection('ID').document("V4BFp3NYtXhP6WO4DEdOckmD6fH3");
@@ -33,7 +34,7 @@ class _HomeState extends State<Home> {
   double along;
   double finaldist;
   int check = 0;
-
+  double _speed;
 
 
 
@@ -42,10 +43,9 @@ class _HomeState extends State<Home> {
   double distanceInBetween (double alat, double along, double lat2, double long2)  {
 
 
-    var gcd = new GreatCircleDistance.fromDegrees(latitude1: alat, longitude1: along, latitude2: lat2, longitude2: long2);
-    return gcd.haversineDistance() ;
+    var distanceInMeters = new GreatCircleDistance.fromDegrees(latitude1: alat, longitude1: along, latitude2: lat2, longitude2: long2);
+    return distanceInMeters.haversineDistance() ;
   }
-
 
 
   void checkPermission() {
@@ -106,7 +106,9 @@ class _HomeState extends State<Home> {
           "6WJEVTcYWWPn6wY4SwsfaW7UGcv2").updateData({
         'longitude': _position.longitude.toDouble(),
         'latitude': _position.latitude.toDouble(),
-//        'distance': finaldist,
+        'distance': finaldist,
+        'speed': _position.speed.toDouble(),
+
       });
     } catch (e) {
       print('Error: ${e.toString()}');
@@ -122,7 +124,7 @@ class _HomeState extends State<Home> {
 
     finaldist = distanceInBetween(alat, along, _lat, _long);
 
-    if(finaldist < 3000000)
+    if(finaldist < 1500 && _speed>10)
     {
       check =1;
     }
@@ -139,7 +141,7 @@ class _HomeState extends State<Home> {
           UserData userData = snapshot.data;
           DatabaseService(uid: user.uid).updateUserData(' ' ?? userData.name,
               _lat ?? userData.latitude, _long ?? userData.longitude,
-              0 ?? userData.speed, 0 ?? userData.distance);
+              _speed ?? userData.speed, 0 ?? userData.distance);
         });
 
 
@@ -224,18 +226,15 @@ class _HomeState extends State<Home> {
                           Container(
                             padding: EdgeInsets.fromLTRB(15.0, 5.0, 0.0, 0.0),
                             child: Text(
-                              'Latitude: ${_position != null
-                                  ? alat.toString()
-                                  : '0'},'
-                                  ' Longitude: ${_position != null ? along
-                                  .toString() : '0'},'
+
                                   'Distance: ${_position != null ? finaldist
+                                  .toString() : '0'}'
+                                  'Speed: ${_position != null ? _speed
                                   .toString() : '0'}'
                               ,
                               style:
                               TextStyle(
-                                fontSize: 25.0,
-                                fontWeight: FontWeight.bold,
+                                fontSize: 15.0,
                                 color: Colors.white,
                               ),
                             ),
