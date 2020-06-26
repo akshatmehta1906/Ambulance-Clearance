@@ -34,6 +34,7 @@ class _HomeState extends State<Home> {
   double along ;
   double finaldist;
   int check = 0;
+  double _speed;
 
 
 
@@ -108,6 +109,7 @@ class _HomeState extends State<Home> {
         'longitude': _position.longitude.toDouble(),
         'latitude': _position.latitude.toDouble(),
         'distance': finaldist,
+        'speed' : _position.speed.toDouble(),
       });
     } catch (e) {
       print('Error: ${e.toString()}');
@@ -120,6 +122,7 @@ class _HomeState extends State<Home> {
 
     _lat = _position.latitude.toDouble();
     _long = _position.longitude.toDouble();
+    _speed = _position.speed.toDouble();
 
     finaldist = distanceInBetween(alat, along, _lat, _long);
 
@@ -140,7 +143,7 @@ class _HomeState extends State<Home> {
           UserData userData = snapshot.data;
           DatabaseService(uid: user.uid).updateUserData(' ' ?? userData.name,
               _lat ?? userData.latitude, _long ?? userData.longitude,
-              0 ?? userData.speed, 0 ?? userData.distance);
+              _speed ?? userData.speed, 0 ?? userData.distance);
         });
 
 
@@ -232,6 +235,7 @@ class _HomeState extends State<Home> {
                                   .toString() : '0'},'
                                   'Distance: ${_position != null ? finaldist
                                   .toString() : '0'}'
+                                  'Speed: $_speed'
                               ,
                               style:
                               TextStyle(

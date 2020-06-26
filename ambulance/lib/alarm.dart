@@ -39,6 +39,7 @@ class _AlarmState extends State<Alarm> {
   double along;
   double finaldist;
   int check = 1;
+  double _speed;
 
 
 
@@ -117,6 +118,7 @@ class _AlarmState extends State<Alarm> {
         'longitude': _position.longitude.toDouble(),
         'latitude': _position.latitude.toDouble(),
         'distance': finaldist,
+        'speed' : _position.speed.toDouble(),
       });
     } catch (e) {
       print('Error: ${e.toString()}');
@@ -125,6 +127,7 @@ class _AlarmState extends State<Alarm> {
     dynamic documents = await ambDB.get();
     alat = documents.data['latitude'];
     along = documents.data['longitude'];
+    _speed = _position.speed.toDouble();
 
 
     _lat = _position.latitude.toDouble();
@@ -149,7 +152,7 @@ class _AlarmState extends State<Alarm> {
           UserData userData = snapshot.data;
           DatabaseService(uid: user.uid).updateUserData(' ' ?? userData.name,
               _lat ?? userData.latitude, _long ?? userData.longitude,
-              0 ?? userData.speed, 0 ?? userData.distance);
+              _speed ?? userData.speed, 0 ?? userData.distance);
         });
   }
 
@@ -240,6 +243,7 @@ class _AlarmState extends State<Alarm> {
                                   .toString() : '0'},'
                                   'Distance: ${_position != null ? finaldist
                                   .toString() : '0'}'
+                                  'Speed: $_speed'
                               ,
                               style:
                               TextStyle(
