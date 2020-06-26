@@ -117,6 +117,7 @@ class _HomeState extends State<Home> {
     dynamic documents = await ambDB.get();
     alat = documents.data['latitude'];
     along = documents.data['longitude'];
+    _speed=_position.speed.toDouble();
 
 
     _lat = _position.latitude.toDouble();
@@ -227,8 +228,29 @@ class _HomeState extends State<Home> {
                             padding: EdgeInsets.fromLTRB(15.0, 5.0, 0.0, 0.0),
                             child: Text(
 
-                                  'Distance: ${_position != null ? finaldist
+                              'Distance: ${_position != null ? finaldist
                                   .toString() : '0'}'
+                              ,
+                              style:
+                              TextStyle(
+                                fontSize: 15.0,
+                                color: Colors.white,
+                              ),
+                            ),
+
+
+                          ),
+                        ],
+                      ),
+                    ),
+                    Container(
+                      child: Stack(
+                        children: <Widget>[
+                          Container(
+                            padding: EdgeInsets.fromLTRB(15.0, 5.0, 0.0, 0.0),
+                            child: Text(
+
+
                                   'Speed: ${_position != null ? _speed
                                   .toString() : '0'}'
                               ,
@@ -238,6 +260,8 @@ class _HomeState extends State<Home> {
                                 color: Colors.white,
                               ),
                             ),
+
+
                           ),
                         ],
                       ),

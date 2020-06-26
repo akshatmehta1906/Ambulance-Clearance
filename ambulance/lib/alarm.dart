@@ -77,7 +77,7 @@ class _AlarmState extends State<Alarm> {
     super.initState();
 
     _assetsAudioPlayer = AssetsAudioPlayer();
-    _assetsAudioPlayer.open(Audio("assets/song2.mp3"),);
+    _assetsAudioPlayer.open(Audio("assets/song1.mp3"),);
 
 
 
@@ -136,7 +136,7 @@ class _AlarmState extends State<Alarm> {
 
     if(finaldist > 1500)
     {
-      check =0;
+      check = 0;
     }
 
     final user = Provider.of<User>(context);
