@@ -251,7 +251,7 @@ class _HomeState extends State<Home> {
                             child: Text(
 
 
-                                  'Speed: ${_position != null ? _speed
+                              'Speed: ${_position != null ? _speed
                                   .toString() : '0'}'
                               ,
                               style:
