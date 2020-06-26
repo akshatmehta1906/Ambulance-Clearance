@@ -1,5 +1,6 @@
 import 'package:ambulance/models/amb.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:geolocator/geolocator.dart';
 import 'dart:async';
 import 'package:flutter/material.dart';
@@ -22,7 +23,9 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+
   final AuthService _auth = AuthService();
+  final FirebaseAuth authentication=FirebaseAuth.instance;
   final _formKey = GlobalKey<FormState>();
   Geolocator _geolocator;
   Position _position;
@@ -36,13 +39,19 @@ class _HomeState extends State<Home> {
   int check = 0;
   double _speed;
 
+//
+//  getCurrentUser() async
+//  {
+//    final FirebaseUser user=await authentication.currentUser();
+//    final cuid=user.uid;
+//    return cuid;
+//  }
 
 
 
 
-  double distanceInBetween (double alat, double along, double lat2, double long2)  {
-
-
+  double distanceInBetween (double alat, double along, double lat2, double long2)
+  {
     var distanceInMeters = new GreatCircleDistance.fromDegrees(latitude1: alat, longitude1: along, latitude2: lat2, longitude2: long2);
     return distanceInMeters.haversineDistance() ;
   }
@@ -68,6 +77,8 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     super.initState();
+//    cuid=getCurrentUser().toString();
+
 
     _geolocator = Geolocator();
     LocationOptions locationOptions =
@@ -100,6 +111,9 @@ class _HomeState extends State<Home> {
       setState(() {
         _position = newPosition;
       });
+
+//      cuid=getCurrentUser().toString();
+
 
 
       Firestore.instance.collection("ID").document(
@@ -251,7 +265,8 @@ class _HomeState extends State<Home> {
                             child: Text(
 
 
-                              'Speed: ${_position != null ? _speed
+                              'Speed: ${_position != null ? _speed.toString()
+
                                   .toString() : '0'}'
                               ,
                               style:

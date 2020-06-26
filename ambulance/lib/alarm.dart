@@ -4,7 +4,7 @@ import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:geolocator/geolocator.dart';
 import 'dart:async';
-import 'package:ambulance/models/amb.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:ambulance/services/auth.dart';
 import 'package:ambulance/services/database.dart';
 import 'package:provider/provider.dart';
@@ -12,7 +12,7 @@ import 'package:ambulance/map/flutter_maps.dart';
 import 'package:ambulance/shared/constants.dart';
 import 'package:ambulance/models/user.dart';
 import 'package:great_circle_distance2/great_circle_distance2.dart';
-import 'dart:math';
+
 
 var db= Firestore.instance.collection('ID');
 var ambDB = Firestore.instance.collection('ID').document("V4BFp3NYtXhP6WO4DEdOckmD6fH3");
@@ -29,6 +29,8 @@ class _AlarmState extends State<Alarm> {
   AssetsAudioPlayer _assetsAudioPlayer;
 
   final AuthService _auth = AuthService();
+  final FirebaseAuth authentication=FirebaseAuth.instance;
+
   final _formKey = GlobalKey<FormState>();
   Geolocator _geolocator;
   Position _position;
@@ -41,18 +43,24 @@ class _AlarmState extends State<Alarm> {
   double finaldist;
   int check = 1;
   double _speed;
+//  String cuid;
+
+//
+//  getCurrentUser() async{
+//    final FirebaseUser user=await authentication.currentUser();
+//    final cuid= user.uid;
+//    return cuid;
+//
+//  }
 
 
 
-
-
-  double distanceInBetween (double alat, double along, double lat2, double long2)  {
-
-
-    var distanceInMeters = new GreatCircleDistance.fromDegrees(latitude1: alat, longitude1: along, latitude2: lat2, longitude2: long2);
-    return distanceInMeters.haversineDistance() ;
+  double distanceInBetween(double alat, double along, double lat2,
+      double long2) {
+    var distanceInMeters = new GreatCircleDistance.fromDegrees(
+        latitude1: alat, longitude1: along, latitude2: lat2, longitude2: long2);
+    return distanceInMeters.haversineDistance();
   }
-
 
 
   void checkPermission() {
@@ -76,15 +84,16 @@ class _AlarmState extends State<Alarm> {
   void initState() {
     super.initState();
 
-    _assetsAudioPlayer = AssetsAudioPlayer();
-    _assetsAudioPlayer.open(Audio("assets/song1.mp3"),);
+//    cuid=getCurrentUser().toString();
 
+
+    _assetsAudioPlayer = AssetsAudioPlayer();
+    _assetsAudioPlayer.open(Audio("assets/song2.mp3"),);
 
 
     _geolocator = Geolocator();
     LocationOptions locationOptions =
     LocationOptions(accuracy: LocationAccuracy.high, distanceFilter: 1);
-
 
 
     checkPermission();
@@ -113,13 +122,14 @@ class _AlarmState extends State<Alarm> {
         _position = newPosition;
       });
 
+//      cuid=getCurrentUser().toString();
+
 
       Firestore.instance.collection("ID").document(
-          "6WJEVTcYWWPn6wY4SwsfaW7UGcv2").updateData({
+          "6WJEVTcYWWPn6wY4SwsfaW7UGcv2".toString()).updateData({
         'longitude': _position.longitude.toDouble(),
         'latitude': _position.latitude.toDouble(),
         'distance': finaldist,
-        'speed' : _position.speed.toDouble(),
       });
     } catch (e) {
       print('Error: ${e.toString()}');
@@ -134,10 +144,9 @@ class _AlarmState extends State<Alarm> {
     _lat = _position.latitude.toDouble();
     _long = _position.longitude.toDouble();
 
-    finaldist=distanceInBetween(alat, along, _lat, _long);
+    finaldist = distanceInBetween(alat, along, _lat, _long);
 
-    if(finaldist > 1500)
-    {
+    if (finaldist > 1500) {
       check = 0;
     }
 
@@ -238,9 +247,8 @@ class _AlarmState extends State<Alarm> {
                             padding: EdgeInsets.fromLTRB(15.0, 5.0, 0.0, 0.0),
                             child: Text(
 
-                                  'Distance: ${_position != null ? finaldist
+                              'Distance: ${_position != null ? finaldist
                                   .toString() : '0'}'
-                                  'Speed: $_speed'
                               ,
                               style:
                               TextStyle(
@@ -258,9 +266,9 @@ class _AlarmState extends State<Alarm> {
 
                     SizedBox(height: 50),
                     RaisedButton(
-                        color: Colors.blue[400],
-                        child: Text('Go To Maps',
-                            style: TextStyle(color: Colors.white)),
+                      color: Colors.blue[400],
+                      child: Text('Go To Maps',
+                          style: TextStyle(color: Colors.white)),
                       onPressed: () {
                         Navigator.push(
                           context,
@@ -268,8 +276,6 @@ class _AlarmState extends State<Alarm> {
                         );
                       },
                     ),
-
-
 
 
                   ]
